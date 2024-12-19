@@ -1,22 +1,16 @@
 flutter_native_splash:
-
   background_image: "assets/images/splash_light.png"
   background_image_dark: "assets/images/splash_dark.png"
 
   android_12:
-
   image: assets/images/eventlyLogo.png
   image_dark: assets/images/eventlyLogo.png
 
   color: "#F2FEFF"
   color_dark: "#101127"
 
-
   branding: assets/images/eventlyBranding.png
   branding_dark: assets/images/eventlyBranding.png
-
-  branding_bottom_padding: 24
-
 
   android: true
   ios: true
