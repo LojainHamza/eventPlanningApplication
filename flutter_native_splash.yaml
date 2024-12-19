@@ -3,14 +3,17 @@ flutter_native_splash:
   background_image_dark: "assets/images/splash_dark.png"
 
   android_12:
-  image: assets/images/eventlyLogo.png
-  image_dark: assets/images/eventlyLogo.png
+  image: assets/images/logo.png
+  image_dark: assets/images/logo.png
+
+  icon_background_color: "#00FFFFFF"
+  icon_background_color_dark: "#00FFFFFF"
 
   color: "#F2FEFF"
   color_dark: "#101127"
 
-  branding: assets/images/eventlyBranding.png
-  branding_dark: assets/images/eventlyBranding.png
+  branding: assets/images/routeBranding.png
+  branding_dark: assets/images/routeBranding.png
 
   android: true
   ios: true
