@@ -1,5 +1,6 @@
 import 'package:event_planning_app/providers/app_language_provider.dart';
 import 'package:event_planning_app/providers/app_theme_provider.dart';
+import 'package:event_planning_app/ui/create_event/create_event_screen.dart';
 import 'package:event_planning_app/ui/home_screen/home_screen.dart';
 import 'package:event_planning_app/utils/myAppThemes.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
       initialRoute: HomeScreen.routeName,
       routes: {
         HomeScreen.routeName: (context) => HomeScreen(),
+        CreateEventScreen.routeName: (context) => CreateEventScreen()
       },
     );
   }

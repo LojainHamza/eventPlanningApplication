@@ -1,4 +1,4 @@
-class MyAppAssets{
+class MyAssetsManager{
   static const String bikeIcon = 'assets/images/bikeIcon.png';
   static const String bookIcon = 'assets/images/bookIcon.png';
   static const String cakeIcon = 'assets/images/cakeIcon.png';
@@ -54,4 +54,5 @@ class MyAppAssets{
   static const String sportLight = 'assets/images/sportLight.png';
   static const String workshopDark = 'assets/images/workshopDark.png';
   static const String workshopLight = 'assets/images/workshopLight.png';
+  static const String logoutButton = 'assets/images/logoutBotton.png';
 }
