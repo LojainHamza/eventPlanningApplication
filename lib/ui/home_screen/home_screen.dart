@@ -19,7 +19,6 @@ class _HomeScreenState extends State<HomeScreen> {
   List <Widget> tabs = [HomeTab(),MapTab(),LoveTab(),ProfileTap()];
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).size.height;
     return Scaffold(
       bottomNavigationBar: Theme(
         data: Theme.of(context).copyWith(
