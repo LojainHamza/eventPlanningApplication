@@ -49,6 +49,8 @@ class MyAppStyles {
 
   static TextStyle bold24White = GoogleFonts.inter(
       fontWeight: FontWeight.bold, fontSize: 24, color: MyAppColors.whiteColor);
+  static TextStyle bold20White = GoogleFonts.inter(
+      fontWeight: FontWeight.bold, fontSize: 20, color: MyAppColors.whiteColor);
   static TextStyle bold12White = GoogleFonts.inter(
       fontWeight: FontWeight.bold, fontSize: 12, color: MyAppColors.whiteColor);
   static TextStyle medium20White = GoogleFonts.inter(

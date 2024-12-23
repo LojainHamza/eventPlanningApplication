@@ -10,7 +10,6 @@ class MyAppThemes{
       unselectedLabelStyle: MyAppStyles.bold12White,
       selectedLabelStyle: MyAppStyles.bold12White,
       elevation: 0,
-      //type: BottomNavigationBarType.fixed,
     ),
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
       backgroundColor: MyAppColors.primaryLight,
@@ -20,11 +19,8 @@ class MyAppThemes{
           width: 4
         )
       ),
-      // RoundedRectangleBorder(
-      //   borderRadius: BorderRadius.circular(50),
-      //   side: const BorderSide(color: MyAppColors.whiteColor,width: 4)
-      // )
     ),
+    scaffoldBackgroundColor: MyAppColors.whiteColor
   );
 
   static final ThemeData darkTheme = ThemeData(
@@ -34,7 +30,6 @@ class MyAppThemes{
         unselectedLabelStyle: MyAppStyles.bold12White,
         selectedLabelStyle: MyAppStyles.bold12White,
         elevation: 0,
-      //type: BottomNavigationBarType.fixed,
     ),
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
         backgroundColor: MyAppColors.primaryDark,
@@ -45,5 +40,6 @@ class MyAppThemes{
         )
       )
     ),
+    scaffoldBackgroundColor: MyAppColors.primaryDark
   );
 }

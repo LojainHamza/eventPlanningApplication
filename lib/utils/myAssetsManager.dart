@@ -1,4 +1,5 @@
 class MyAssetsManager{
+  static const String brandingImage = 'assets/images/branding.png';
   static const String bikeIcon = 'assets/images/bikeIcon.png';
   static const String bookIcon = 'assets/images/bookIcon.png';
   static const String cakeIcon = 'assets/images/cakeIcon.png';

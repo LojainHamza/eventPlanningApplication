@@ -22,7 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       bottomNavigationBar: Theme(
         data: Theme.of(context).copyWith(
-          canvasColor: MyAppColors.transparentColor
+            canvasColor: MyAppColors.transparentColor
         ),
         child: BottomAppBar(
           padding: EdgeInsets.zero,
@@ -37,12 +37,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
               });
             },
-              items: [
-                buildBottomNavBarItem(index:0,iconSelectedName: MyAssetsManager.homeSelected, iconUnSelectedName: MyAssetsManager.homeUnSelected, label: AppLocalizations.of(context)!.home),
-                buildBottomNavBarItem(index:1,iconSelectedName:MyAssetsManager.mapSelected, iconUnSelectedName: MyAssetsManager.mapUnSelected, label: AppLocalizations.of(context)!.map),
-                buildBottomNavBarItem(index:2,iconSelectedName:MyAssetsManager.loveSelected, iconUnSelectedName: MyAssetsManager.loveUnSelected, label: AppLocalizations.of(context)!.love),
-                buildBottomNavBarItem(index:3,iconSelectedName:MyAssetsManager.profileSelected,iconUnSelectedName: MyAssetsManager.profileUnSelected, label: AppLocalizations.of(context)!.profile),
-              ],
+            items: [
+              buildBottomNavBarItem(index:0,iconSelectedName: MyAssetsManager.homeSelected, iconUnSelectedName: MyAssetsManager.homeUnSelected, label: AppLocalizations.of(context)!.home),
+              buildBottomNavBarItem(index:1,iconSelectedName:MyAssetsManager.mapSelected, iconUnSelectedName: MyAssetsManager.mapUnSelected, label: AppLocalizations.of(context)!.map),
+              buildBottomNavBarItem(index:2,iconSelectedName:MyAssetsManager.loveSelected, iconUnSelectedName: MyAssetsManager.loveUnSelected, label: AppLocalizations.of(context)!.love),
+              buildBottomNavBarItem(index:3,iconSelectedName:MyAssetsManager.profileSelected,iconUnSelectedName: MyAssetsManager.profileUnSelected, label: AppLocalizations.of(context)!.profile),
+            ],
             type: BottomNavigationBarType.fixed,
             selectedItemColor: MyAppColors.whiteColor,
             unselectedItemColor: MyAppColors.whiteColor,
@@ -50,12 +50,12 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-          onPressed: (){
-            // add event
-            // navigate to add event screen
-            Navigator.of(context).pushNamed(CreateEventScreen.routeName);
-          },
-          child: const Icon(Icons.add,color: MyAppColors.whiteColor,size: 35,),
+        onPressed: (){
+          // add event
+          // navigate to add event screen
+          Navigator.of(context).pushNamed(CreateEventScreen.routeName);
+        },
+        child: const Icon(Icons.add,color: MyAppColors.whiteColor,size: 35,),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: tabs[selectedIndex],

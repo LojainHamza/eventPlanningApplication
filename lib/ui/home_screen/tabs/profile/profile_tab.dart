@@ -28,9 +28,9 @@ class _ProfileTapState extends State<ProfileTap> {
         backgroundColor: MyAppColors.primaryLight,
         toolbarHeight: height*0.2,
         shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(60)
-          )
+            borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(60)
+            )
         ),
         title: Row(
           children: [
@@ -52,7 +52,10 @@ class _ProfileTapState extends State<ProfileTap> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(AppLocalizations.of(context)!.language,
-                style: MyAppStyles.bold20Black),
+                style: themeProvider.appTheme == ThemeMode.light?
+                MyAppStyles.bold20Black:
+                MyAppStyles.bold20White
+            ),
             SizedBox(height: height * 0.02),
             InkWell(
               onTap: () {
@@ -61,8 +64,7 @@ class _ProfileTapState extends State<ProfileTap> {
               child: Container(
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16),
-                    border:
-                    Border.all(color: MyAppColors.primaryLight, width: 2)),
+                    border: Border.all(color: MyAppColors.primaryLight, width: 2)),
                 child: Padding(
                   padding: const EdgeInsets.all(15),
                   child: Row(
@@ -84,7 +86,10 @@ class _ProfileTapState extends State<ProfileTap> {
             ),
             SizedBox(height: height * 0.02),
             Text(AppLocalizations.of(context)!.theme,
-                style: MyAppStyles.bold20Black),
+                style: themeProvider.appTheme == ThemeMode.light?
+                MyAppStyles.bold20Black:
+                MyAppStyles.bold20White
+            ),
             SizedBox(height: height * 0.02),
             InkWell(
               onTap: () {
