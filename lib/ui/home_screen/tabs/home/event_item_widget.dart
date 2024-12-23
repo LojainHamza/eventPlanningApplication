@@ -3,9 +3,15 @@ import 'package:event_planning_app/utils/MyAppStyles.dart';
 import 'package:event_planning_app/utils/myAssetsManager.dart';
 import 'package:flutter/material.dart';
 
-class EventItemWidget extends StatelessWidget {
+class EventItemWidget extends StatefulWidget {
   const EventItemWidget({super.key});
 
+  @override
+  State<EventItemWidget> createState() => _EventItemWidgetState();
+}
+
+class _EventItemWidgetState extends State<EventItemWidget> {
+  bool isSelected = false;
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
@@ -64,7 +70,17 @@ class EventItemWidget extends StatelessWidget {
               children: [
                 Expanded(
                     child: Text('This is a Birthtday Party',style: MyAppStyles.medium14Black)),
-                Image.asset(MyAssetsManager.loveUnSelected,color: MyAppColors.primaryLight,)
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      isSelected = !isSelected;
+                    });
+                  },
+                  child: Image.asset(
+                    isSelected ? MyAssetsManager.loveSelected : MyAssetsManager.loveUnSelected,
+                    color: MyAppColors.primaryLight,
+                  ),
+                )
               ],
             ),
           )
