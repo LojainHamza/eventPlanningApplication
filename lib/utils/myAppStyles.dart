@@ -38,6 +38,8 @@ class MyAppStyles {
       fontWeight: FontWeight.bold, fontSize: 24, color: MyAppColors.blackColor);
   static TextStyle bold20Black = GoogleFonts.inter(
       fontWeight: FontWeight.bold, fontSize: 20, color: MyAppColors.blackColor);
+  static TextStyle bold14Black = GoogleFonts.inter(
+      fontWeight: FontWeight.bold, fontSize: 14, color: MyAppColors.blackColor);
   static TextStyle medium18Black = GoogleFonts.inter(
       fontWeight: FontWeight.w500, fontSize: 18, color: MyAppColors.blackColor);
   static TextStyle medium16Black = GoogleFonts.inter(
