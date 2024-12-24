@@ -1,4 +1,4 @@
-import 'package:event_planning_app/ui/home_screen/tabs/custom_text_field.dart';
+import 'package:event_planning_app/ui/home_screen/tabs/widgets/custom_text_field.dart';
 import 'package:event_planning_app/ui/home_screen/tabs/home/event_item_widget.dart';
 import 'package:event_planning_app/utils/MyAppColors.dart';
 import 'package:event_planning_app/utils/MyAppStyles.dart';

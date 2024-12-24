@@ -127,7 +127,7 @@ class _ProfileTapState extends State<ProfileTap> {
                   borderRadius: BorderRadius.circular(10)
                 ),
                 padding: EdgeInsets.symmetric(
-                  vertical: height*0.015,
+                  vertical: height*0.02,
                   horizontal: width*0.05
                 )
               ),
