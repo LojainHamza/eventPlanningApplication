@@ -1,5 +1,6 @@
 import 'package:event_planning_app/providers/app_language_provider.dart';
 import 'package:event_planning_app/providers/app_theme_provider.dart';
+import 'package:event_planning_app/ui/auth/forget_password/forget_password_screen.dart';
 import 'package:event_planning_app/ui/auth/login/login_screen.dart';
 import 'package:event_planning_app/ui/auth/register/register_screen.dart';
 import 'package:event_planning_app/ui/create_event/create_event_screen.dart';
@@ -36,6 +37,7 @@ class MyApp extends StatelessWidget {
       routes: {
         LoginScreen.routeName: (context) => LoginScreen(),
         RegisterScreen.routeName: (context) => RegisterScreen(),
+        ForgetPassword.routeName: (context) => ForgetPassword(),
         HomeScreen.routeName: (context) => HomeScreen(),
         CreateEventScreen.routeName: (context) => CreateEventScreen()
       },

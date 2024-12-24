@@ -1,3 +1,4 @@
+import 'package:event_planning_app/ui/auth/forget_password/forget_password_screen.dart';
 import 'package:event_planning_app/ui/auth/register/register_screen.dart';
 import 'package:event_planning_app/ui/home_screen/home_screen.dart';
 import 'package:event_planning_app/utils/MyAppColors.dart';
@@ -57,7 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
               SizedBox(height: height * 0.01),
               TextButton(
                   onPressed: (){
-                    // todo: navigate to forgetPassword screen
+                    Navigator.of(context).pushNamed(ForgetPassword.routeName);
                   },
                   child: Align(
                     alignment: Alignment.centerRight,
