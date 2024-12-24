@@ -1,10 +1,12 @@
+import 'package:event_planning_app/providers/app_theme_provider.dart';
 import 'package:event_planning_app/utils/MyAppColors.dart';
 import 'package:event_planning_app/utils/MyAppStyles.dart';
 import 'package:event_planning_app/utils/myAssetsManager.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 
 class EventItemWidget extends StatefulWidget {
-  const EventItemWidget({super.key});
 
   @override
   State<EventItemWidget> createState() => _EventItemWidgetState();
@@ -16,6 +18,7 @@ class _EventItemWidgetState extends State<EventItemWidget> {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
+    var themeProvider = Provider.of<AppThemeProvider>(context);
     return Container(
       height: height*0.3,
       margin: EdgeInsets.symmetric(
@@ -44,7 +47,7 @@ class _EventItemWidgetState extends State<EventItemWidget> {
             ),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
-              color: MyAppColors.whiteColor
+              color: themeProvider.appTheme == ThemeMode.light? MyAppColors.whiteColor : MyAppColors.primaryDark
             ),
             child: Column(
               children: [
@@ -64,12 +67,12 @@ class _EventItemWidgetState extends State<EventItemWidget> {
             ),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: MyAppColors.whiteColor
+              color:  themeProvider.appTheme == ThemeMode.light? MyAppColors.whiteColor : MyAppColors.primaryDark
             ),
             child: Row(
               children: [
                 Expanded(
-                    child: Text('This is a Birthtday Party',style: MyAppStyles.medium14Black)),
+                    child: Text('This is a Birthtday Party',style: themeProvider.appTheme == ThemeMode.light?MyAppStyles.medium14Black:MyAppStyles.medium14White)),
                 GestureDetector(
                   onTap: () {
                     setState(() {

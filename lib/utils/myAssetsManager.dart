@@ -57,4 +57,5 @@ class MyAssetsManager{
   static const String workshopDark = 'assets/images/workshopDark.png';
   static const String workshopLight = 'assets/images/workshopLight.png';
   static const String logoutButton = 'assets/images/logoutBotton.png';
+  static const String usaFlag = 'assets/images/usaFlag.png';
 }

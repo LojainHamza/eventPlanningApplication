@@ -26,6 +26,7 @@ class _ProfileTapState extends State<ProfileTap> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: MyAppColors.primaryLight,
+        automaticallyImplyLeading: false,
         toolbarHeight: height*0.2,
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(

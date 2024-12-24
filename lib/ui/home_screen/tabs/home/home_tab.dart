@@ -1,3 +1,4 @@
+import 'package:event_planning_app/providers/app_theme_provider.dart';
 import 'package:event_planning_app/ui/home_screen/tabs/home/event_item_widget.dart';
 import 'package:event_planning_app/ui/home_screen/tabs/home/tab_event_widget.dart';
 import 'package:event_planning_app/utils/MyAppStyles.dart';
@@ -5,6 +6,7 @@ import 'package:event_planning_app/utils/myAppColors.dart';
 import 'package:event_planning_app/utils/myAssetsManager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
 class HomeTab extends StatefulWidget {
   @override
@@ -18,6 +20,7 @@ class _HomeTabState extends State<HomeTab> {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
+    var themeProvider = Provider.of<AppThemeProvider>(context);
     List<String> eventsNameList = [
       AppLocalizations.of(context)!.all,
       AppLocalizations.of(context)!.sport,
@@ -32,7 +35,8 @@ class _HomeTabState extends State<HomeTab> {
     ];
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: MyAppColors.primaryLight,
+        backgroundColor: themeProvider.appTheme == ThemeMode.light?MyAppColors.primaryLight:MyAppColors.primaryDark,
+        automaticallyImplyLeading: false,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -68,8 +72,8 @@ class _HomeTabState extends State<HomeTab> {
               vertical: height*0.01
             ),
             height: height*0.15,
-            decoration: const BoxDecoration(
-              color: MyAppColors.primaryLight,
+            decoration: BoxDecoration(
+              color: themeProvider.appTheme == ThemeMode.light?MyAppColors.primaryLight:MyAppColors.primaryDark,
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(35),
                 bottomRight: Radius.circular(35),

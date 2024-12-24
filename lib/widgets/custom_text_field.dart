@@ -11,11 +11,15 @@ class CustomTextField extends StatelessWidget {
   TextStyle? style;
   Widget? prefixIcon;
   Widget? suffixIcon;
-  CustomTextField({this.borderColor,required this.hintText, this.labelText, this.hintStyle, this.labelStyle, this.style, this.prefixIcon, this.suffixIcon});
+  bool obscureText;
+
+  CustomTextField({this.borderColor,required this.hintText, this.labelText, this.hintStyle, this.labelStyle, this.style, this.prefixIcon, this.suffixIcon, this.obscureText=false});
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      obscureText: obscureText,
+      obscuringCharacter: '*',
       cursorColor: MyAppColors.blackColor,
       style: style ?? MyAppStyles.medium16Black,
       decoration: InputDecoration(
