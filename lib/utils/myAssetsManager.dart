@@ -10,6 +10,7 @@ class MyAssetsManager{
   static const String egyptFlag = 'assets/images/egFlag.png';
   static const String emailIcon = 'assets/images/emailIcon.png';
   static const String eventTitleImage = 'assets/images/eventlyTitleImage.png';
+  static const String exitIcon = 'assets/images/exitIcon.png';
   static const String forgetPasswordImage = 'assets/images/forgetPasswordImage.png';
   static const String googleIcon = 'assets/images/googleIcon.png';
   static const String homeSelected = 'assets/images/home_selected.png';

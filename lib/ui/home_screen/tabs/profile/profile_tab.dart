@@ -119,10 +119,28 @@ class _ProfileTapState extends State<ProfileTap> {
                 ),
               ),
             ),
-            SizedBox(height: height*0.2),
-            InkWell(
-                onTap: (){},
-                child: Image.asset(MyAssetsManager.logoutButton)),
+            Spacer(),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: MyAppColors.redColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)
+                ),
+                padding: EdgeInsets.symmetric(
+                  vertical: height*0.015,
+                  horizontal: width*0.05
+                )
+              ),
+                onPressed: (){},
+                child: Row(
+                  children: [
+                    Image.asset(MyAssetsManager.exitIcon),
+                    SizedBox(width: width*0.02),
+                    Text(AppLocalizations.of(context)!.logout,style: MyAppStyles.medium20White,)
+                  ],
+                )
+            ),
+            SizedBox(height: height*0.025),
           ],
         ),
       ),
