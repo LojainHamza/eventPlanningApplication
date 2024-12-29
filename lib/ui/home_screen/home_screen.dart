@@ -1,4 +1,4 @@
-import 'package:event_planning_app/ui/create_event/create_event_screen.dart';
+import 'package:event_planning_app/ui/home_screen/tabs/home/create_event/create_event_screen.dart';
 import 'package:event_planning_app/ui/home_screen/tabs/home/home_tab.dart';
 import 'package:event_planning_app/ui/home_screen/tabs/love/love_tab.dart';
 import 'package:event_planning_app/ui/home_screen/tabs/map/map_tab.dart';

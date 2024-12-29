@@ -3,16 +3,22 @@ import 'package:event_planning_app/providers/app_theme_provider.dart';
 import 'package:event_planning_app/ui/auth/forget_password/forget_password_screen.dart';
 import 'package:event_planning_app/ui/auth/login/login_screen.dart';
 import 'package:event_planning_app/ui/auth/register/register_screen.dart';
-import 'package:event_planning_app/ui/create_event/create_event_screen.dart';
 import 'package:event_planning_app/ui/home_screen/home_screen.dart';
-import 'package:event_planning_app/utils/MyAppColors.dart';
+import 'package:event_planning_app/ui/home_screen/tabs/home/create_event/create_event_screen.dart';
 import 'package:event_planning_app/utils/myAppThemes.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main(){
-  runApp(MultiProvider(
+void main()async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(
+      MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (context) => AppLanguageProvider()),
       ChangeNotifierProvider(create: (context) => AppThemeProvider())
@@ -33,7 +39,7 @@ class MyApp extends StatelessWidget {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       locale: Locale(languageProvider.appLanguage),
-      initialRoute: LoginScreen.routeName,
+      initialRoute: HomeScreen.routeName,
       routes: {
         LoginScreen.routeName: (context) => LoginScreen(),
         RegisterScreen.routeName: (context) => RegisterScreen(),

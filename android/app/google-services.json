@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "54272111128",
+    "project_id": "event-planning-flutter",
+    "storage_bucket": "event-planning-flutter.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:54272111128:android:5b823a531fd605a36dc96d",
+        "android_client_info": {
+          "package_name": "com.example.event_planning_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDuaPcRgN12_N88BUpzTBs6y-XBvti-ev4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

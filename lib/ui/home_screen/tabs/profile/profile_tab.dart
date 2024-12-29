@@ -1,7 +1,7 @@
 import 'package:event_planning_app/providers/app_language_provider.dart';
 import 'package:event_planning_app/providers/app_theme_provider.dart';
-import 'package:event_planning_app/ui/home_screen/language_bottom_sheet.dart';
-import 'package:event_planning_app/ui/home_screen/theme_bottom_sheet.dart';
+import 'package:event_planning_app/ui/home_screen/tabs/profile/language_bottom_sheet.dart';
+import 'package:event_planning_app/ui/home_screen/tabs/profile/theme_bottom_sheet.dart';
 import 'package:event_planning_app/utils/MyAppColors.dart';
 import 'package:event_planning_app/utils/MyAppStyles.dart';
 import 'package:event_planning_app/utils/myAssetsManager.dart';
