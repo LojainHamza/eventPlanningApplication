@@ -1,4 +1,7 @@
+import 'package:event_planning_app/firebase_utils.dart';
+import 'package:event_planning_app/model/event.dart';
 import 'package:event_planning_app/providers/app_theme_provider.dart';
+import 'package:event_planning_app/providers/events_list_provider.dart';
 import 'package:event_planning_app/ui/home_screen/tabs/home/tab_event_widget.dart';
 import 'package:event_planning_app/utils/MyAppColors.dart';
 import 'package:event_planning_app/utils/MyAppStyles.dart';
@@ -27,12 +30,16 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
   String formatedDate = ''; // date
   TimeOfDay? selectedTime;
   String formatedTime = ''; // time
+  String selectedImage = '';
+  String selectedEvent = '';
+  late EventsListProvider eventListProvider;  // global
 
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
     var themeProvider = Provider.of<AppThemeProvider>(context);
+    eventListProvider = Provider.of<EventsListProvider>(context);
     List<String> eventsNameList = [
       AppLocalizations.of(context)!.sport,
       AppLocalizations.of(context)!.birthday,
@@ -55,6 +62,8 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
       MyAssetsManager.workshopLight,
       MyAssetsManager.bookClubLight,
     ];
+    selectedImage = imagesList[selectedIndex];
+    selectedEvent = eventsNameList[selectedIndex];
 
     return Scaffold(
       appBar: AppBar(
@@ -163,7 +172,8 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                       eventNameOrTime: AppLocalizations.of(context)!.eventDate,
                       chooseEventNameOrTime: selectedDate == null
                           ? AppLocalizations.of(context)!.chooseDate
-                          : formatedDate,
+                          : DateFormat('dd/MM/yyyy').format(selectedDate!),
+                      //formatedDate,
                       onChooseDateOrTime: chooseDate,
                     ),
                     SizedBox(height: height * 0.01),
@@ -292,6 +302,20 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
         showErrorDialog(errorMessages);
       } else {
         // todo: Add event logic here (save to database)
+        Event event = Event(
+            title: titleController.text,
+            description: descriptionController.text,
+            imagePath: selectedImage,
+            eventName: selectedEvent,
+            eventDate: selectedDate!,
+            eventTime: formatedTime);
+        FirebaseUtils.addEventToFireStore(event).timeout(const Duration(milliseconds: 500),
+            onTimeout: (){
+          // todo: alert dialog, snack bar, toast
+          print('Event Added Successfully');
+          eventListProvider.getAllEvents(); // <= refresh eventsList
+          Navigator.of(context).pop();
+        });
       }
     }
   }

@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_planning_app/providers/app_language_provider.dart';
 import 'package:event_planning_app/providers/app_theme_provider.dart';
+import 'package:event_planning_app/providers/events_list_provider.dart';
 import 'package:event_planning_app/ui/auth/forget_password/forget_password_screen.dart';
 import 'package:event_planning_app/ui/auth/login/login_screen.dart';
 import 'package:event_planning_app/ui/auth/register/register_screen.dart';
@@ -17,11 +19,13 @@ void main()async{
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await FirebaseFirestore.instance.disableNetwork();  // offline
   runApp(
       MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (context) => AppLanguageProvider()),
-      ChangeNotifierProvider(create: (context) => AppThemeProvider())
+      ChangeNotifierProvider(create: (context) => AppThemeProvider()),
+      ChangeNotifierProvider(create: (context)=>EventsListProvider())
     ],
       child: MyApp()));
 }

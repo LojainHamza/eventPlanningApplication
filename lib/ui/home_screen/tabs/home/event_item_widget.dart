@@ -1,12 +1,17 @@
+import 'package:event_planning_app/model/event.dart';
+import 'package:event_planning_app/providers/app_language_provider.dart';
 import 'package:event_planning_app/providers/app_theme_provider.dart';
 import 'package:event_planning_app/utils/MyAppColors.dart';
 import 'package:event_planning_app/utils/MyAppStyles.dart';
 import 'package:event_planning_app/utils/myAssetsManager.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 
 class EventItemWidget extends StatefulWidget {
+  Event event;
+  EventItemWidget({required this.event});
 
   @override
   State<EventItemWidget> createState() => _EventItemWidgetState();
@@ -19,6 +24,13 @@ class _EventItemWidgetState extends State<EventItemWidget> {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
     var themeProvider = Provider.of<AppThemeProvider>(context);
+    var languageProvider = Provider.of<AppLanguageProvider>(context);
+    String monthName;
+    if (languageProvider.appLanguage == 'ar') {
+      monthName = DateFormat('MMMM', 'ar').format(widget.event.eventDate);
+    } else {
+      monthName = DateFormat('MMMM', 'en').format(widget.event.eventDate);
+    }
     return Container(
       height: height*0.3,
       margin: EdgeInsets.symmetric(
@@ -30,7 +42,11 @@ class _EventItemWidgetState extends State<EventItemWidget> {
           color: MyAppColors.primaryLight,
           width: 2
         ),
-        image: const DecorationImage(image: AssetImage(MyAssetsManager.birthdayLight),fit: BoxFit.fill),
+        image: DecorationImage(
+            image: AssetImage(
+                widget.event.imagePath
+            ),
+            fit: BoxFit.fill),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -51,8 +67,8 @@ class _EventItemWidgetState extends State<EventItemWidget> {
             ),
             child: Column(
               children: [
-                Text('22',style: MyAppStyles.bold20Primary),
-                Text('Dec',style: MyAppStyles.bold20Primary)
+                Text(widget.event.eventDate.day.toString(),style: MyAppStyles.bold20Primary),
+                Text(monthName,style: MyAppStyles.bold20Primary)
               ],
             ),
           ),
@@ -72,7 +88,7 @@ class _EventItemWidgetState extends State<EventItemWidget> {
             child: Row(
               children: [
                 Expanded(
-                    child: Text('This is a Birthtday Party',style: themeProvider.appTheme == ThemeMode.light?MyAppStyles.medium14Black:MyAppStyles.medium14White)),
+                    child: Text(widget.event.title,style: themeProvider.appTheme == ThemeMode.light?MyAppStyles.medium14Black:MyAppStyles.medium14White)),
                 GestureDetector(
                   onTap: () {
                     setState(() {

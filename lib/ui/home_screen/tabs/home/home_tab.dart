@@ -1,4 +1,5 @@
 import 'package:event_planning_app/providers/app_theme_provider.dart';
+import 'package:event_planning_app/providers/events_list_provider.dart';
 import 'package:event_planning_app/ui/home_screen/tabs/home/event_item_widget.dart';
 import 'package:event_planning_app/ui/home_screen/tabs/home/tab_event_widget.dart';
 import 'package:event_planning_app/utils/MyAppStyles.dart';
@@ -14,25 +15,19 @@ class HomeTab extends StatefulWidget {
 }
 
 class _HomeTabState extends State<HomeTab> {
-  int selectedIndex = 0 ;
+
 
   @override
   Widget build(BuildContext context) {
+    var eventListProvider = Provider.of<EventsListProvider>(context);
+    eventListProvider.getEventsNameList(context);
+    if(eventListProvider.eventsList.isEmpty){
+      eventListProvider.getAllEvents();
+    }
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
     var themeProvider = Provider.of<AppThemeProvider>(context);
-    List<String> eventsNameList = [
-      AppLocalizations.of(context)!.all,
-      AppLocalizations.of(context)!.sport,
-      AppLocalizations.of(context)!.birthday,
-      AppLocalizations.of(context)!.meeting,
-      AppLocalizations.of(context)!.gaming,
-      AppLocalizations.of(context)!.eating,
-      AppLocalizations.of(context)!.holiday,
-      AppLocalizations.of(context)!.exhibition,
-      AppLocalizations.of(context)!.workshop,
-      AppLocalizations.of(context)!.book_club,
-    ];
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: themeProvider.appTheme == ThemeMode.light?MyAppColors.primaryLight:MyAppColors.primaryDark,
@@ -74,7 +69,7 @@ class _HomeTabState extends State<HomeTab> {
             height: height*0.15,
             decoration: BoxDecoration(
               color: themeProvider.appTheme == ThemeMode.light?MyAppColors.primaryLight:MyAppColors.primaryDark,
-              borderRadius: BorderRadius.only(
+              borderRadius: const BorderRadius.only(
                 bottomLeft: Radius.circular(35),
                 bottomRight: Radius.circular(35),
               )
@@ -89,13 +84,10 @@ class _HomeTabState extends State<HomeTab> {
                   ],
                 ),
                 DefaultTabController(
-                    length: eventsNameList.length,
+                    length: eventListProvider.eventsNameList.length,
                     child: TabBar(
                       onTap: (index){
-                        selectedIndex = index;
-                        setState(() {
-
-                        });
+                        eventListProvider.changeSelectedIndex(index);
                       },
                       isScrollable: true,
                         indicatorColor: MyAppColors.transparentColor,
@@ -105,14 +97,14 @@ class _HomeTabState extends State<HomeTab> {
                           horizontal: width*0.01,
                           vertical: height*0.02
                         ),
-                        tabs: eventsNameList.map((eventName){
+                        tabs: eventListProvider.eventsNameList.map((eventName){
                           return TabEventWidget(
                             borderColor: themeProvider.appTheme == ThemeMode.light?MyAppColors.whiteColor:MyAppColors.primaryLight,
                             backgroundColor: themeProvider.appTheme == ThemeMode.light?MyAppColors.whiteColor:MyAppColors.primaryLight,
                               selectedTextStyle: MyAppStyles.medium16Primary,
                               unSelectedTextStyle: MyAppStyles.medium16White,
                               eventName: eventName,
-                              isSelected: selectedIndex == eventsNameList.indexOf(eventName));
+                              isSelected: eventListProvider.selectedIndex == eventListProvider.eventsNameList.indexOf(eventName));
                         }).toList())
                 ),
 
@@ -125,10 +117,12 @@ class _HomeTabState extends State<HomeTab> {
                   horizontal: width*0.04,
                   vertical: height*0.01
                 ),
-                child: ListView.builder(
-                    itemCount: 20,
+                child: eventListProvider.filteredList.isEmpty?
+                 Center(child: Text(AppLocalizations.of(context)!.no_events_found,style: MyAppStyles.medium18Black,),)
+                :ListView.builder(
+                    itemCount: eventListProvider.filteredList.length,
                     itemBuilder: (context,index){
-                      return EventItemWidget();
+                      return EventItemWidget(event: eventListProvider.filteredList[index]);
                     }
                 ),
               )

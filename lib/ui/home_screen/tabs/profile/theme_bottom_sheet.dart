@@ -27,6 +27,7 @@ class _ThemeBottomSheetState extends State<ThemeBottomSheet> {
             onTap: () {
               // change theme to dark
               themeProvider.changeTheme(ThemeMode.dark);
+              Navigator.pop(context);
             },
             child: themeProvider.isDarkMode()?
             getSelectedItemWidget(AppLocalizations.of(context)!.dark):
@@ -37,6 +38,7 @@ class _ThemeBottomSheetState extends State<ThemeBottomSheet> {
               onTap: () {
                 // change theme to light
                 themeProvider.changeTheme(ThemeMode.light);
+                Navigator.pop(context);
               },
               child: themeProvider.isDarkMode()?
           getUnSelectedItemWidget(AppLocalizations.of(context)!.light):
