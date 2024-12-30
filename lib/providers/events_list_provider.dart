@@ -9,6 +9,7 @@ class EventsListProvider extends ChangeNotifier{
   List<Event> eventsList = [];
   int selectedIndex = 0 ;
   List<String> eventsNameList = [];
+  List<Event> favoritesList = [];
   void getEventsNameList(BuildContext context){
     eventsNameList= [
       AppLocalizations.of(context)!.all,
@@ -76,5 +77,17 @@ class EventsListProvider extends ChangeNotifier{
     }else{
       getFilteredEvents();
     }
+  }
+
+  void addEventToFavorites(Event event) {
+    if (!favoritesList.contains(event)) {
+      favoritesList.add(event);
+      notifyListeners();
+    }
+  }
+
+  void removeEventFromFavorites(Event event) {
+    favoritesList.remove(event);
+    notifyListeners();
   }
 }
