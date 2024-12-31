@@ -7,6 +7,8 @@ import 'package:event_planning_app/ui/auth/login/login_screen.dart';
 import 'package:event_planning_app/ui/auth/register/register_screen.dart';
 import 'package:event_planning_app/ui/home_screen/home_screen.dart';
 import 'package:event_planning_app/ui/home_screen/tabs/home/create_event/create_event_screen.dart';
+import 'package:event_planning_app/ui/onBoarding/onBoarding_view.dart';
+import 'package:event_planning_app/ui/onBoarding/start_screen.dart';
 import 'package:event_planning_app/utils/myAppThemes.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -43,8 +45,10 @@ class MyApp extends StatelessWidget {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       locale: Locale(languageProvider.appLanguage),
-      initialRoute: HomeScreen.routeName,
+      initialRoute: StartScreen.routeName,
       routes: {
+        StartScreen.routeName: (context) => StartScreen(),
+        OnboardingView.routeName: (context) => OnboardingView(),
         LoginScreen.routeName: (context) => LoginScreen(),
         RegisterScreen.routeName: (context) => RegisterScreen(),
         ForgetPassword.routeName: (context) => ForgetPassword(),

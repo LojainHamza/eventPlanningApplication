@@ -24,7 +24,7 @@ class CustomTextField extends StatelessWidget {
     return TextFormField(
       controller: controller,
       validator: validator,
-      maxLines: maxLines,
+      maxLines: maxLines?? 1,
       obscureText: obscureText,
       obscuringCharacter: '*',
       cursorColor: MyAppColors.blackColor,

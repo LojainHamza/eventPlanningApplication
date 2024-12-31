@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 class MyAppThemes{
   static final ThemeData lightTheme = ThemeData(
     primaryColor: MyAppColors.primaryLight,
+    scaffoldBackgroundColor: MyAppColors.whiteColor,
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       showUnselectedLabels: true,
       unselectedLabelStyle: MyAppStyles.bold12White,
@@ -20,11 +21,14 @@ class MyAppThemes{
         )
       ),
     ),
-    scaffoldBackgroundColor: MyAppColors.whiteColor
+    bottomSheetTheme: const BottomSheetThemeData(
+      backgroundColor: MyAppColors.transparentColor
+    )
   );
 
   static final ThemeData darkTheme = ThemeData(
     primaryColor: MyAppColors.primaryDark,
+    scaffoldBackgroundColor: MyAppColors.primaryDark,
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       showUnselectedLabels: true,
         unselectedLabelStyle: MyAppStyles.bold12White,
@@ -40,6 +44,8 @@ class MyAppThemes{
         )
       )
     ),
-    scaffoldBackgroundColor: MyAppColors.primaryDark
+    bottomSheetTheme: const BottomSheetThemeData(
+          backgroundColor: MyAppColors.transparentColor
+      )
   );
 }

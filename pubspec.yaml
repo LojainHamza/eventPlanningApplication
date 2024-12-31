@@ -43,6 +43,7 @@ dependencies:
   provider: ^6.1.2
   firebase_core: ^3.9.0
   cloud_firestore: ^5.6.0
+  smooth_page_indicator: ^1.2.0+3
 
 dev_dependencies:
   flutter_test:
