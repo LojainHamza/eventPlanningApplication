@@ -1,4 +1,3 @@
-import 'package:event_planning_app/providers/app_language_provider.dart';
 import 'package:event_planning_app/providers/app_theme_provider.dart';
 import 'package:event_planning_app/utils/MyAppColors.dart';
 import 'package:event_planning_app/utils/MyAppStyles.dart';
@@ -18,32 +17,35 @@ class _ThemeBottomSheetState extends State<ThemeBottomSheet> {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var themeProvider = Provider.of<AppThemeProvider>(context);
-    return Padding(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          InkWell(
-            onTap: () {
-              // change theme to dark
-              themeProvider.changeTheme(ThemeMode.dark);
-              Navigator.pop(context);
-            },
-            child: themeProvider.isDarkMode()?
-            getSelectedItemWidget(AppLocalizations.of(context)!.dark):
-            getUnSelectedItemWidget(AppLocalizations.of(context)!.dark),
-          ),
-          SizedBox(height: height * 0.02),
-          InkWell(
+    return Container(
+      color: MyAppColors.whiteColor,
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            InkWell(
               onTap: () {
-                // change theme to light
-                themeProvider.changeTheme(ThemeMode.light);
+                // change theme to dark
+                themeProvider.changeTheme(ThemeMode.dark);
                 Navigator.pop(context);
               },
               child: themeProvider.isDarkMode()?
-          getUnSelectedItemWidget(AppLocalizations.of(context)!.light):
-          getSelectedItemWidget(AppLocalizations.of(context)!.light)),
-        ],
+              getSelectedItemWidget(AppLocalizations.of(context)!.dark):
+              getUnSelectedItemWidget(AppLocalizations.of(context)!.dark),
+            ),
+            SizedBox(height: height * 0.02),
+            InkWell(
+                onTap: () {
+                  // change theme to light
+                  themeProvider.changeTheme(ThemeMode.light);
+                  Navigator.pop(context);
+                },
+                child: themeProvider.isDarkMode()?
+            getUnSelectedItemWidget(AppLocalizations.of(context)!.light):
+            getSelectedItemWidget(AppLocalizations.of(context)!.light)),
+          ],
+        ),
       ),
     );
   }

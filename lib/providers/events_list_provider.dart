@@ -75,7 +75,7 @@ class EventsListProvider extends ChangeNotifier{
     if(selectedIndex == 0){   // All
       getAllEvents();
     }else{
-      getFilteredEvents();
+      getFilteredEvents1();
     }
   }
 

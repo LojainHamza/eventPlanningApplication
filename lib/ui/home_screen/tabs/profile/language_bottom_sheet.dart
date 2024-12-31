@@ -17,30 +17,35 @@ class _LanguageBottomSheetState extends State<LanguageBottomSheet> {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var languageProvider = Provider.of<AppLanguageProvider>(context);
-    return Padding(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          InkWell(
-            onTap: () {
-              // change language to english
-              languageProvider.changeLanguage('en');
-            },
-            child: languageProvider.appLanguage == 'en'?
-            getSelectedItemWidget(AppLocalizations.of(context)!.english):
-            getUnSelectedItemWidget(AppLocalizations.of(context)!.english),
-          ),
-          SizedBox(height: height * 0.02),
-          InkWell(
+    return Container(
+      color: MyAppColors.whiteColor,
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            InkWell(
               onTap: () {
-                // change language to arabic
-                languageProvider.changeLanguage('ar');
+                // change language to english
+                languageProvider.changeLanguage('en');
+                Navigator.pop(context);
               },
-              child: languageProvider.appLanguage == 'ar'?
-          getSelectedItemWidget(AppLocalizations.of(context)!.arabic):
-          getUnSelectedItemWidget(AppLocalizations.of(context)!.arabic)),
-        ],
+              child: languageProvider.appLanguage == 'en'?
+              getSelectedItemWidget(AppLocalizations.of(context)!.english):
+              getUnSelectedItemWidget(AppLocalizations.of(context)!.english),
+            ),
+            SizedBox(height: height * 0.02),
+            InkWell(
+                onTap: () {
+                  // change language to arabic
+                  languageProvider.changeLanguage('ar');
+                  Navigator.pop(context);
+                },
+                child: languageProvider.appLanguage == 'ar'?
+            getSelectedItemWidget(AppLocalizations.of(context)!.arabic):
+            getUnSelectedItemWidget(AppLocalizations.of(context)!.arabic)),
+          ],
+        ),
       ),
     );
   }

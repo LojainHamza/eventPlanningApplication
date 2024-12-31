@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class Event {
   static const String collectionName = 'Events';
   String id;
