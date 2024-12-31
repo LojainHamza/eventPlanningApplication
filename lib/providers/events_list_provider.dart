@@ -6,8 +6,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EventsListProvider extends ChangeNotifier{
   //data
-  List<Event> eventsList = [];
   int selectedIndex = 0 ;
+  List<Event> eventsList = [];
   List<String> eventsNameList = [];
   List<Event> favoritesList = [];
   void getEventsNameList(BuildContext context){
@@ -24,7 +24,6 @@ class EventsListProvider extends ChangeNotifier{
       AppLocalizations.of(context)!.book_club,
     ];
   }
-
   //function that changes data
   List<Event> filteredList = [];  // filtered events by event name
 
@@ -75,7 +74,7 @@ class EventsListProvider extends ChangeNotifier{
     if(selectedIndex == 0){   // All
       getAllEvents();
     }else{
-      getFilteredEvents1();
+      getFilteredEvents();
     }
   }
 

@@ -51,8 +51,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: (){
-          // add event
-          // navigate to add event screen
           Navigator.of(context).pushNamed(CreateEventScreen.routeName);
         },
         child: const Icon(Icons.add,color: MyAppColors.whiteColor,size: 35,),
