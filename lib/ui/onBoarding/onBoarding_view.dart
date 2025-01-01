@@ -16,9 +16,15 @@ class OnboardingView extends StatefulWidget {
 }
 
 class _OnboardingViewState extends State<OnboardingView> {
-  final controller = OnBoardingItems();
-  final pageController = PageController();
+  late OnBoardingItems controller;
+  final PageController pageController = PageController();
   int currentPage = 0;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    controller = OnBoardingItems(context); // Initialize with context here
+  }
 
   @override
   void initState() {
@@ -104,7 +110,7 @@ class _OnboardingViewState extends State<OnboardingView> {
               effect: WormEffect(
                 dotHeight: 12,
                 dotWidth: 12,
-                dotColor: themeProvider.appTheme==ThemeMode.light? MyAppColors.blackColor: MyAppColors.whiteColor,
+                dotColor: themeProvider.appTheme == ThemeMode.light ? MyAppColors.blackColor : MyAppColors.whiteColor,
                 activeDotColor: MyAppColors.primaryLight,
               ),
             ),

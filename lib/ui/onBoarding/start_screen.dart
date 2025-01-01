@@ -29,15 +29,15 @@ class StartScreen extends StatelessWidget {
             children: [
               Center(child: Image.asset(MyAssetsManager.onBoarding1,height: height*0.45,width: width*0.85,fit: BoxFit.fill)),
               SizedBox(height: height*0.02),
-              Text('Personalize Your Experience',style: MyAppStyles.bold20Primary),
+              Text(AppLocalizations.of(context)!.title1onBoarding,style: MyAppStyles.bold20Primary),
               SizedBox(height: height*0.02),
-              Text('Choose your preferred theme and language to get started with a comfortable, tailored experience that suits your style.',style: MyAppStyles.medium16Black),
+              Text(AppLocalizations.of(context)!.description1onBoarding,style: MyAppStyles.medium16Black),
               SizedBox(height: height*0.02),
-              LanguageOrTheme(text: 'Language', firstImage: MyAssetsManager.usaFlag, secondImage: MyAssetsManager.egyptFlag),
+              LanguageOrTheme(text: AppLocalizations.of(context)!.language, firstImage: MyAssetsManager.usaFlag, secondImage: MyAssetsManager.egyptFlag),
               SizedBox(height: height*0.02),
-              LanguageOrTheme(text: 'Theme', firstImage: MyAssetsManager.sunUnSelected, secondImage: MyAssetsManager.moonSelected),
+              LanguageOrTheme(text: AppLocalizations.of(context)!.theme, firstImage: MyAssetsManager.sunUnSelected, secondImage: MyAssetsManager.moonSelected),
               SizedBox(height: height*0.02),
-              CustomElevatedButton(text: 'Let\'s Start',
+              CustomElevatedButton(text: AppLocalizations.of(context)!.letsStart,
                   onButtonClicked: (){Navigator.of(context).pushReplacementNamed(OnboardingView.routeName);
               })
           
