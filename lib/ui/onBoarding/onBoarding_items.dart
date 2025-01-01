@@ -1,5 +1,4 @@
 import 'package:event_planning_app/ui/onBoarding/onBoarding_model.dart';
-import 'package:event_planning_app/utils/MyAppStyles.dart';
 import 'package:event_planning_app/utils/myAssetsManager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';

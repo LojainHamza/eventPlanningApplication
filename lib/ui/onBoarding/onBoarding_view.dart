@@ -23,7 +23,7 @@ class _OnboardingViewState extends State<OnboardingView> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    controller = OnBoardingItems(context); // Initialize with context here
+    controller = OnBoardingItems(context);
   }
 
   @override
