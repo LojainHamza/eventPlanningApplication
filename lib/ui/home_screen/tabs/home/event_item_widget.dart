@@ -28,9 +28,9 @@ class _EventItemWidgetState extends State<EventItemWidget> {
 
     String monthName;
     if (languageProvider.appLanguage == 'ar') {
-      monthName = DateFormat('MMMM', 'ar').format(widget.event.eventDate);
+      monthName = DateFormat('MMM', 'ar').format(widget.event.eventDate);
     } else {
-      monthName = DateFormat('MMMM', 'en').format(widget.event.eventDate);
+      monthName = DateFormat('MMM', 'en').format(widget.event.eventDate);
     }
 
     return Container(
@@ -59,6 +59,7 @@ class _EventItemWidgetState extends State<EventItemWidget> {
               children: [
                 Text(widget.event.eventDate.day.toString(), style: MyAppStyles.bold20Primary),
                 Text(monthName, style: MyAppStyles.bold20Primary),
+                // Text(DateFormat('MMM').format(widget.event.eventDate), style: MyAppStyles.bold20Primary),
               ],
             ),
           ),
