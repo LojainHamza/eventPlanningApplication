@@ -14,6 +14,10 @@ class LoveTab extends StatelessWidget {
     var width = MediaQuery.of(context).size.width;
     var eventsListProvider = Provider.of<EventsListProvider>(context);
 
+    // if(eventsListProvider.favoriteEventList.isEmpty){
+    //   eventsListProvider.getFavoriteEvents();
+    // }
+
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.only(top: height * 0.05),
@@ -37,13 +41,33 @@ class LoveTab extends StatelessWidget {
                   style: MyAppStyles.medium18Black,
                 ),
               )
-                  : ListView.builder(
-                itemCount: eventsListProvider.favoritesList.length,
-                itemBuilder: (context, index) {
-                  return EventItemWidget(event: eventsListProvider.favoritesList[index]);
-                },
-              ),
+                  : Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: width*0.03,
+                    ),
+                    child: ListView.builder(
+                                    itemCount: eventsListProvider.favoritesList.length,
+                                    itemBuilder: (context, index) {
+                    return EventItemWidget(event: eventsListProvider.favoritesList[index]);
+                                    },
+                                  ),
+                  ),
             ),
+            // Expanded(
+            //   child: eventsListProvider.favoriteEventList.isEmpty
+            //       ? Center(
+            //     child: Text(
+            //       AppLocalizations.of(context)!.no_fav_events_yet,
+            //       style: MyAppStyles.medium18Black,
+            //     ),
+            //   )
+            //       : ListView.builder(
+            //     itemCount: eventsListProvider.favoriteEventList.length,
+            //     itemBuilder: (context, index) {
+            //       return EventItemWidget(event: eventsListProvider.favoriteEventList[index]);
+            //     },
+            //   ),
+            // ),
           ],
         ),
       ),

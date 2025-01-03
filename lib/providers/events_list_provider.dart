@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_planning_app/firebase_utils.dart';
 import 'package:event_planning_app/model/event.dart';
+import 'package:event_planning_app/utils/flutter_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -9,6 +10,8 @@ class EventsListProvider extends ChangeNotifier{
   int selectedIndex = 0 ;
   List<Event> eventsList = [];
   List<String> eventsNameList = [];
+  List<Event> filteredList = [];  // filtered events by event name
+  // List <Event> favoriteEventList = [];
   List<Event> favoritesList = [];
   void getEventsNameList(BuildContext context){
     eventsNameList= [
@@ -25,8 +28,6 @@ class EventsListProvider extends ChangeNotifier{
     ];
   }
   //function that changes data
-  List<Event> filteredList = [];  // filtered events by event name
-
   void getAllEvents()async{
     QuerySnapshot<Event> querySnapshot = await FirebaseUtils.getEventCollection().get();
     // List<Event>  List<QueryDocumentSnapshot<Event>>
@@ -78,15 +79,36 @@ class EventsListProvider extends ChangeNotifier{
     }
   }
 
-  void addEventToFavorites(Event event) {
+  // void updateFavoriteEvent(Event event,BuildContext context){
+  //   FirebaseUtils.getEventCollection().doc(event.id).update(
+  //       {'isSelected': !event.isSelected}
+  //   ).timeout(const Duration(milliseconds: 500),onTimeout: (){
+  //     ToastMessage.toastMessage(msg: AppLocalizations.of(context)!.event_updated_successfully);
+  //     selectedIndex == 0? getAllEvents():getFilteredEvents();
+  //     getFavoriteEvents();
+  //   });
+  //   notifyListeners();
+  // }
+
+  // void getFavoriteEvents()async{
+  //   var querySnapshot = await FirebaseUtils.getEventCollection().orderBy('eventDate').where('isFavorite', isEqualTo: true).get();
+  //   favoriteEventList = querySnapshot.docs.map((doc){
+  //     return doc.data();
+  //   }).toList();
+  //   notifyListeners();
+  // }
+
+  void addEventToFavorites(Event event,BuildContext context) {
     if (!favoritesList.contains(event)) {
       favoritesList.add(event);
+      ToastMessage.toastMessage(msg: AppLocalizations.of(context)!.event_updated_successfully);
       notifyListeners();
     }
   }
 
-  void removeEventFromFavorites(Event event) {
+  void removeEventFromFavorites(Event event,BuildContext context) {
     favoritesList.remove(event);
+    ToastMessage.toastMessage(msg: AppLocalizations.of(context)!.event_updated_successfully);
     notifyListeners();
   }
 }

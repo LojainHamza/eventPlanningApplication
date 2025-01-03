@@ -314,15 +314,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
             onTimeout: (){
           eventListProvider.getAllEvents(); // <= refresh eventsList
           Navigator.of(context).pop();
-          Fluttertoast.showToast(
-              msg: AppLocalizations.of(context)!.event_added_successfully,
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.CENTER,
-              timeInSecForIosWeb: 1,
-              backgroundColor: MyAppColors.primaryLight,
-              textColor: MyAppColors.whiteColor,
-              fontSize: 16.0,
-          );
+          Fluttertoast.showToast(msg: AppLocalizations.of(context)!.event_added_successfully);
         });
       }
     }

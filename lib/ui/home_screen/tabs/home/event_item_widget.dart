@@ -83,9 +83,9 @@ class _EventItemWidgetState extends State<EventItemWidget> {
                     setState(() {
                       widget.event.isSelected = !widget.event.isSelected;
                       if (widget.event.isSelected) {
-                        eventsListProvider.addEventToFavorites(widget.event);
+                        eventsListProvider.addEventToFavorites(widget.event,context);
                       } else {
-                        eventsListProvider.removeEventFromFavorites(widget.event);
+                        eventsListProvider.removeEventFromFavorites(widget.event,context);
                       }
                     });
                   },
@@ -93,7 +93,19 @@ class _EventItemWidgetState extends State<EventItemWidget> {
                     widget.event.isSelected ? MyAssetsManager.loveSelected : MyAssetsManager.loveUnSelected,
                     color: MyAppColors.primaryLight,
                   ),
-                ),
+                // InkWell(
+                //   onTap: () {
+                //     // Update favorite status
+                //     eventsListProvider.updateFavoriteEvent(widget.event,context);
+                //   },
+                //   child: Image.asset(
+                //     widget.event.isSelected == true
+                //         ? MyAssetsManager.loveSelected
+                //         : MyAssetsManager.loveUnSelected,
+                //     color: MyAppColors.primaryLight,
+                //   ),
+                // ),
+                )
               ],
             ),
           ),
