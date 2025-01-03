@@ -11,6 +11,7 @@ import 'package:event_planning_app/widgets/custom_elevated_button.dart';
 import 'package:event_planning_app/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -311,10 +312,17 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
             eventTime: formatedTime);
         FirebaseUtils.addEventToFireStore(event).timeout(const Duration(milliseconds: 500),
             onTimeout: (){
-          // todo: alert dialog, snack bar, toast
-          print('Event Added Successfully');
           eventListProvider.getAllEvents(); // <= refresh eventsList
           Navigator.of(context).pop();
+          Fluttertoast.showToast(
+              msg: AppLocalizations.of(context)!.event_added_successfully,
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIosWeb: 1,
+              backgroundColor: MyAppColors.primaryLight,
+              textColor: MyAppColors.whiteColor,
+              fontSize: 16.0,
+          );
         });
       }
     }

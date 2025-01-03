@@ -1,9 +1,7 @@
 import 'package:event_planning_app/providers/app_theme_provider.dart';
 import 'package:event_planning_app/utils/MyAppColors.dart';
 import 'package:event_planning_app/utils/MyAppStyles.dart';
-import 'package:event_planning_app/utils/myAssetsManager.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 class ChooseDateOrTime extends StatelessWidget {
@@ -15,7 +13,6 @@ class ChooseDateOrTime extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
     var themeProvider = Provider.of<AppThemeProvider>(context);
     return Row(
