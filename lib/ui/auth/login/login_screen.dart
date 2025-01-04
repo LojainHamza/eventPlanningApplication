@@ -6,6 +6,7 @@ import 'package:event_planning_app/utils/MyAppStyles.dart';
 import 'package:event_planning_app/utils/myAssetsManager.dart';
 import 'package:event_planning_app/widgets/custom_elevated_button.dart';
 import 'package:event_planning_app/widgets/custom_text_field.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -19,6 +20,9 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool isObscure = true;
+  var emailController = TextEditingController(text: 'loj@gmail.com');
+  var passwordController = TextEditingController(text: '123456');
+  var formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -28,131 +32,181 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: width * 0.03),
         child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Image.asset(
-                MyAssetsManager.logo,
-                width: width * 0.3,
-                height: height * 0.33,
-              ),
-              CustomTextField(
-                  hintText: AppLocalizations.of(context)!.email,
-                  prefixIcon: Image.asset(MyAssetsManager.emailIcon)),
-              SizedBox(height: height * 0.02),
-              CustomTextField(
-                obscureText: isObscure,
-                hintText: AppLocalizations.of(context)!.password,
-                prefixIcon: Image.asset(MyAssetsManager.passwordIcon),
-                suffixIcon: IconButton(
-                  icon: Icon(
-                    isObscure ? Icons.visibility_off : Icons.visibility,
-                    color: MyAppColors.grayColor,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      isObscure = !isObscure;
-                    });
-                  },
+          child: Form(
+            key: formKey,
+            child: Column(
+              children: [
+                Image.asset(
+                  MyAssetsManager.logo,
+                  width: width * 0.3,
+                  height: height * 0.33,
                 ),
-              ),
-              SizedBox(height: height * 0.01),
-              TextButton(
-                  onPressed: (){
-                    Navigator.of(context).pushNamed(ForgetPassword.routeName);
+                CustomTextField(
+                    controller: emailController,
+                    validator: (text){
+                      if(text == null || text.trim().isEmpty){
+                        return AppLocalizations.of(context)!.please_enter_email;
+                      }
+                      final bool emailValid =
+                      RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                          .hasMatch(text);
+                      if(!emailValid){
+                        return AppLocalizations.of(context)!.please_enter_valid_email;
+                      }
+                      return null;
+                    },
+                    keyboardType: TextInputType.emailAddress,
+                    hintText: AppLocalizations.of(context)!.email,
+                    prefixIcon: Image.asset(MyAssetsManager.emailIcon)),
+                SizedBox(height: height * 0.02),
+                CustomTextField(
+                  controller: passwordController,
+                  validator: (text){
+                    if(text == null || text.trim().isEmpty){
+                      return AppLocalizations.of(context)!.please_enter_password;
+                    }
+                    if(text.length < 6){
+                      return AppLocalizations.of(context)!.password_must_be_at_least_6_characters;
+                    }
+                    return null;
                   },
-                  child: Align(
-                    alignment: Alignment.centerRight,
-                    child: Text(AppLocalizations.of(context)!.forgetPassword,
-                      style: MyAppStyles.bold16Primary.copyWith(
-                      decoration: TextDecoration.underline,
-                        decorationColor: MyAppColors.primaryLight,
-                        decorationThickness: 1.5
+                  keyboardType: TextInputType.phone,
+                  obscureText: isObscure,
+                  hintText: AppLocalizations.of(context)!.password,
+                  prefixIcon: Image.asset(MyAssetsManager.passwordIcon),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      isObscure ? Icons.visibility_off : Icons.visibility,
+                      color: MyAppColors.grayColor,
                     ),
-                   ),
-                  )
-              ),
-              SizedBox(height: height * 0.01),
-              CustomElevatedButton(text: AppLocalizations.of(context)!.login,
-                onButtonClicked: login
-              ),
-              SizedBox(height: height * 0.03),
-              Text.rich(
-                textAlign: TextAlign.center,
-                  TextSpan(
-                    children: [
-                      TextSpan(text: AppLocalizations.of(context)!.doNotHaveAccount,style: MyAppStyles.medium16Black),
-                      WidgetSpan(
-                        child: SizedBox(width: width*0.03),
-                      ),
-                      TextSpan(text: AppLocalizations.of(context)!.createAccount,
-                          recognizer: TapGestureRecognizer()..onTap = (){
-                        Navigator.of(context).pushNamed(RegisterScreen.routeName);
-                      },
-                          style: MyAppStyles.bold16Primary.copyWith(
+                    onPressed: () {
+                      setState(() {
+                        isObscure = !isObscure;
+                      });
+                    },
+                  ),
+                ),
+                SizedBox(height: height * 0.01),
+                TextButton(
+                    onPressed: (){
+                      Navigator.of(context).pushNamed(ForgetPassword.routeName);
+                    },
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: Text(AppLocalizations.of(context)!.forgetPassword,
+                        style: MyAppStyles.bold16Primary.copyWith(
                         decoration: TextDecoration.underline,
-                        decorationColor: MyAppColors.primaryLight,
-                      ))
-                    ]
-                  )
-              ),
-              SizedBox(height: height * 0.03),
-              Row(
-                children: [
-                  const Expanded(
-                    child: Divider(
-                      thickness: 2,
-                      indent: 20,
-                      endIndent: 20,
-                      color: MyAppColors.primaryLight,
-                    ),
-                  ),
-                  Text(AppLocalizations.of(context)!.or,style: MyAppStyles.medium16Primary,),
-                  const Expanded(
-                    child: Divider(
-                      thickness: 2,
-                      indent: 20,
-                      endIndent: 20,
-                      color: MyAppColors.primaryLight,
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: height * 0.02),
-              CustomElevatedButton(text: AppLocalizations.of(context)!.loginWithGoogle,
-              onButtonClicked: (){
-                // todo: navigate to login with google screen
-              },
-              textStyle: MyAppStyles.medium20Primary,
-              prefixIcon: Image.asset(MyAssetsManager.googleIcon),
-              backgroundColor: MyAppColors.transparentColor),
-              SizedBox(height: height * 0.03),
-              Container(
-                width: width*0.15,
-                padding: EdgeInsets.symmetric(
-                  horizontal: width*0.002
+                          decorationColor: MyAppColors.primaryLight,
+                          decorationThickness: 1.5
+                      ),
+                     ),
+                    )
                 ),
-                decoration: BoxDecoration(
-                  color: MyAppColors.transparentColor,
-                  borderRadius: BorderRadius.circular(50),
-                  border: Border.all(
-                    color: MyAppColors.primaryLight
-                  )
+                SizedBox(height: height * 0.01),
+                CustomElevatedButton(text: AppLocalizations.of(context)!.login,
+                  onButtonClicked: login
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                SizedBox(height: height * 0.03),
+                Text.rich(
+                  textAlign: TextAlign.center,
+                    TextSpan(
+                      children: [
+                        TextSpan(text: AppLocalizations.of(context)!.doNotHaveAccount,style: MyAppStyles.medium16Black),
+                        WidgetSpan(
+                          child: SizedBox(width: width*0.03),
+                        ),
+                        TextSpan(text: AppLocalizations.of(context)!.createAccount,
+                            recognizer: TapGestureRecognizer()..onTap = (){
+                          Navigator.of(context).pushNamed(RegisterScreen.routeName);
+                        },
+                            style: MyAppStyles.bold16Primary.copyWith(
+                          decoration: TextDecoration.underline,
+                          decorationColor: MyAppColors.primaryLight,
+                        ))
+                      ]
+                    )
+                ),
+                SizedBox(height: height * 0.03),
+                Row(
                   children: [
-                    Image.asset(MyAssetsManager.usaFlag),
-                    Image.asset(MyAssetsManager.egyptFlag)
+                    const Expanded(
+                      child: Divider(
+                        thickness: 2,
+                        indent: 20,
+                        endIndent: 20,
+                        color: MyAppColors.primaryLight,
+                      ),
+                    ),
+                    Text(AppLocalizations.of(context)!.or,style: MyAppStyles.medium16Primary,),
+                    const Expanded(
+                      child: Divider(
+                        thickness: 2,
+                        indent: 20,
+                        endIndent: 20,
+                        color: MyAppColors.primaryLight,
+                      ),
+                    ),
                   ],
                 ),
-              ),
-            ],
+                SizedBox(height: height * 0.02),
+                CustomElevatedButton(text: AppLocalizations.of(context)!.loginWithGoogle,
+                onButtonClicked: (){
+                  // todo: navigate to login with google screen
+                },
+                textStyle: MyAppStyles.medium20Primary,
+                prefixIcon: Image.asset(MyAssetsManager.googleIcon),
+                backgroundColor: MyAppColors.transparentColor),
+                SizedBox(height: height * 0.03),
+                Container(
+                  width: width*0.15,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: width*0.002
+                  ),
+                  decoration: BoxDecoration(
+                    color: MyAppColors.transparentColor,
+                    borderRadius: BorderRadius.circular(50),
+                    border: Border.all(
+                      color: MyAppColors.primaryLight
+                    )
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Image.asset(MyAssetsManager.usaFlag),
+                      Image.asset(MyAssetsManager.egyptFlag)
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
-  void login(){
-    Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
+  void login()async{
+    if(formKey.currentState?.validate() == true){
+      try {
+        final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+            email: emailController.text,
+            password: passwordController.text
+        );
+        print('Login Successfully');
+        print(credential.user?.uid??"");
+      }
+      on FirebaseAuthException catch (e) {
+        if (e.code == 'user-not-found') {
+          print('No user found for that email.');
+        } else if (e.code == 'wrong-password') {
+          print('Wrong password provided for that user.');
+        } else if (e.code == 'invalid-credential') {
+          print('The supplied auth credential is incorrect, malformed or has expired.');
+      }
+      }
+      catch(e){
+        print(e.toString());
+      }
+    }
+    //Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
   }
 }

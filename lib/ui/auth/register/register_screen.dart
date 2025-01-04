@@ -7,6 +7,7 @@ import 'package:event_planning_app/widgets/custom_text_field.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class RegisterScreen extends StatefulWidget {
   static const String routeName = 'registerScreen';
@@ -17,6 +18,11 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   bool isObscure = true;
+  var nameController = TextEditingController(text: 'Loj');
+  var emailController = TextEditingController(text: 'loj@gmail.com');
+  var passwordController = TextEditingController(text: '123456');
+  var rePasswordController = TextEditingController(text: '123456');
+  var formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -30,104 +36,173 @@ class _RegisterScreenState extends State<RegisterScreen> {
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: width * 0.03),
         child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Image.asset(
-                MyAssetsManager.logo,
-                width: width * 0.3,
-                height: height * 0.28,
-              ),
-              CustomTextField(
-                  hintText: AppLocalizations.of(context)!.name,
-                  prefixIcon: Image.asset(MyAssetsManager.nameIcon)),
-              SizedBox(height: height * 0.02),
-              CustomTextField(
-                  hintText: AppLocalizations.of(context)!.email,
-                  prefixIcon: Image.asset(MyAssetsManager.emailIcon)),
-              SizedBox(height: height * 0.02),
-              CustomTextField(
-                obscureText: isObscure,
-                hintText: AppLocalizations.of(context)!.password,
-                prefixIcon: Image.asset(MyAssetsManager.passwordIcon),
-                suffixIcon: IconButton(
-                  icon: Icon(
-                    isObscure ? Icons.visibility_off : Icons.visibility,
-                    color: MyAppColors.grayColor,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      isObscure = !isObscure;
-                    });
-                  },
+          child: Form(
+            key: formKey,
+            child: Column(
+              children: [
+                Image.asset(
+                  MyAssetsManager.logo,
+                  width: width * 0.3,
+                  height: height * 0.28,
                 ),
-              ),
-              SizedBox(height: height * 0.02),
-              CustomTextField(
-                obscureText: isObscure,
-                hintText: AppLocalizations.of(context)!.rePassword,
-                prefixIcon: Image.asset(MyAssetsManager.passwordIcon),
-                suffixIcon: IconButton(
-                  icon: Icon(
-                    isObscure ? Icons.visibility_off : Icons.visibility,
-                    color: MyAppColors.grayColor,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      isObscure = !isObscure;
-                    });
-                  },
+                CustomTextField(
+                  controller: nameController,
+                    validator: (text){
+                      if(text == null || text.trim().isEmpty){
+                        return AppLocalizations.of(context)!.please_enter_name;
+                      }
+                      return null;
+                    },
+                    hintText: AppLocalizations.of(context)!.name,
+                    prefixIcon: Image.asset(MyAssetsManager.nameIcon)
                 ),
-              ),
-              SizedBox(height: height * 0.01),
-              CustomElevatedButton(text: AppLocalizations.of(context)!.createAccount,
-              onButtonClicked: register),
-              SizedBox(height: height * 0.03),
-              Text.rich(
-                textAlign: TextAlign.center,
-                  TextSpan(
+                SizedBox(height: height * 0.02),
+                CustomTextField(
+                    controller: emailController,
+                    validator: (text){
+                      if(text == null || text.trim().isEmpty){
+                        return AppLocalizations.of(context)!.please_enter_email;
+                      }
+                      final bool emailValid =
+                      RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                          .hasMatch(text);
+                      if(!emailValid){
+                        return AppLocalizations.of(context)!.please_enter_valid_email;
+                      }
+                      return null;
+                    },
+                    keyboardType: TextInputType.emailAddress,
+                    hintText: AppLocalizations.of(context)!.email,
+                    prefixIcon: Image.asset(MyAssetsManager.emailIcon)
+                ),
+                SizedBox(height: height * 0.02),
+                CustomTextField(
+                  controller: passwordController,
+                  validator: (text){
+                    if(text == null || text.trim().isEmpty){
+                      return AppLocalizations.of(context)!.please_enter_password;
+                    }
+                    if(text.length < 6){
+                      return AppLocalizations.of(context)!.password_must_be_at_least_6_characters;
+                    }
+                    return null;
+                  },
+                  keyboardType: TextInputType.phone,
+                  obscureText: isObscure,
+                  hintText: AppLocalizations.of(context)!.password,
+                  prefixIcon: Image.asset(MyAssetsManager.passwordIcon),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      isObscure ? Icons.visibility_off : Icons.visibility,
+                      color: MyAppColors.grayColor,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        isObscure = !isObscure;
+                      });
+                    },
+                  ),
+                ),
+                SizedBox(height: height * 0.02),
+                CustomTextField(
+                  controller: rePasswordController,
+                  validator: (text){
+                    if(text == null || text.trim().isEmpty){
+                      return AppLocalizations.of(context)!.please_re_enter_password;
+                    }
+                    if(text.length < 6){
+                      return AppLocalizations.of(context)!.password_must_be_at_least_6_characters;
+                    }
+                    if(text != passwordController.text){
+                      return AppLocalizations.of(context)!.re_password_does_not_match_password;
+                    }
+                    return null;
+                  },
+                  keyboardType: TextInputType.phone,
+                  obscureText: isObscure,
+                  hintText: AppLocalizations.of(context)!.rePassword,
+                  prefixIcon: Image.asset(MyAssetsManager.passwordIcon),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      isObscure ? Icons.visibility_off : Icons.visibility,
+                      color: MyAppColors.grayColor,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        isObscure = !isObscure;
+                      });
+                    },
+                  ),
+                ),
+                SizedBox(height: height * 0.01),
+                CustomElevatedButton(text: AppLocalizations.of(context)!.createAccount,
+                onButtonClicked: register),
+                SizedBox(height: height * 0.03),
+                Text.rich(
+                  textAlign: TextAlign.center,
+                    TextSpan(
+                      children: [
+                        TextSpan(text: AppLocalizations.of(context)!.alreadyHaveAccount,style: MyAppStyles.medium16Black),
+                        WidgetSpan(
+                          child: SizedBox(width: width*0.03),
+                        ),
+                        TextSpan(text: AppLocalizations.of(context)!.login,
+                            recognizer: TapGestureRecognizer()..onTap=(){
+                          Navigator.of(context).pop();
+                            },style: MyAppStyles.bold16Primary.copyWith(
+                          decoration: TextDecoration.underline,
+                          decorationColor: MyAppColors.primaryLight
+                        ))
+                      ]
+                    )
+                ),
+                SizedBox(height: height * 0.02),
+                Container(
+                  width: width*0.15,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: width*0.002
+                  ),
+                  decoration: BoxDecoration(
+                    color: MyAppColors.transparentColor,
+                    borderRadius: BorderRadius.circular(50),
+                    border: Border.all(
+                      color: MyAppColors.primaryLight
+                    )
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      TextSpan(text: AppLocalizations.of(context)!.alreadyHaveAccount,style: MyAppStyles.medium16Black),
-                      WidgetSpan(
-                        child: SizedBox(width: width*0.03),
-                      ),
-                      TextSpan(text: AppLocalizations.of(context)!.login,
-                          recognizer: TapGestureRecognizer()..onTap=(){
-                        Navigator.of(context).pop();
-                          },style: MyAppStyles.bold16Primary.copyWith(
-                        decoration: TextDecoration.underline,
-                        decorationColor: MyAppColors.primaryLight
-                      ))
-                    ]
-                  )
-              ),
-              SizedBox(height: height * 0.02),
-              Container(
-                width: width*0.15,
-                padding: EdgeInsets.symmetric(
-                  horizontal: width*0.002
+                      Image.asset(MyAssetsManager.usaFlag),
+                      Image.asset(MyAssetsManager.egyptFlag)
+                    ],
+                  ),
                 ),
-                decoration: BoxDecoration(
-                  color: MyAppColors.transparentColor,
-                  borderRadius: BorderRadius.circular(50),
-                  border: Border.all(
-                    color: MyAppColors.primaryLight
-                  )
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Image.asset(MyAssetsManager.usaFlag),
-                    Image.asset(MyAssetsManager.egyptFlag)
-                  ],
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
     );
   }
-  void register(){
-    Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
+  void register()async{
+    if(formKey.currentState?.validate() == true){
+      try {
+        final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: emailController.text,
+          password: passwordController.text,
+        );
+        print('register successfully');
+        print(credential.user?.uid??"");
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'weak-password') {
+          print('The password provided is too weak.');
+        } else if (e.code == 'email-already-in-use') {
+          print('The account already exists for that email.');
+        }
+      } catch (e) {
+        print(e);
+      }
+    }
+    //Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
   }
 }

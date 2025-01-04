@@ -77,5 +77,15 @@
   "description4onBoarding": "اجعل كل حدث لا يُنسى من خلال مشاركة التجربة مع الآخرين. تتيح لك منصتنا دعوة الأصدقاء، وإبقاء الجميع على اطلاع، والاحتفال باللحظات معاً. صوِّر الإثارة وشاركها مع شبكتك، حتى تتمكن من استعادة أبرز اللحظات والاحتفاظ بالذكريات.",
   "letsStart": "هيا نبدأ",
   "event_added_successfully": "تم إضافة الحدث بنجاح",
-  "event_updated_successfully": "تم تعديل حالة الحدث بنجاح"
+  "event_updated_successfully": "تم تعديل حالة الحدث بنجاح",
+  "please_enter_name": "برجاء إدخال الاسم",
+  "please_enter_email": "برجاء إدخال البريد الإلكتروني‘",
+  "please_enter_valid_email": "برجاء إدخال بريد إلكتروني سليم",
+  "please_enter_password": "برجاء إدخال كلمة المرور",
+  "please_re_enter_password": "برجاء إعادة إدخال كلمة المرور",
+  "password_must_be_at_least_6_characters": "يجب أن تتكون كلمة المرور من 6 أحرف على الأقل",
+  "re_password_does_not_match_password": "إعادة كلمة المرور لا تتطابق مع كلمة المرور",
+  "login_successfully": "تم تسجيل الدخول بنجاح",
+  "account_created_successfully": "تم إنشاء الحساب بنجاح",
+  "this_account_is_already_created_before": "تم إنشاء هذا الحساب بالفعل من قبل"
 }
