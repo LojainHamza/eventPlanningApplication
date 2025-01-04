@@ -87,5 +87,14 @@
   "re_password_does_not_match_password": "Re-Password Doesn't Match Password",
   "login_successfully": "Login Successfully",
   "account_created_successfully": "Account Created Successfully",
-  "this_account_is_already_created_before": "This Account Is Already Created Before"
+  "this_account_is_already_created_before": "This Account Is Already Created Before",
+  "loading": "Loading..",
+  "registered_successfully": "Registered Successfully",
+  "no_user_found_for_that_email": "No User Found For That Email.",
+  "wrong_password_provided_for_that_user": "Wrong Password Provided For That User.",
+  "the_supplied_auth_credential_is_incorrect_malformed_or_has_expired": "The Supplied Auth Credential Is Incorrect, Malformed Or Has Expired.",
+  "the_password_provided_is_too_weak": "The Password Provided Is Too Weak.",
+  "the_account_already_exists_for_that_email": "The Account Already Exists For That Email.",
+  "success": "Success",
+  "network_error": "حدث خطأ في الشبكة (مثل انتهاء المهلة أو انقطاع الاتصال)"
 }

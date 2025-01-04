@@ -87,5 +87,14 @@
   "re_password_does_not_match_password": "إعادة كلمة المرور لا تتطابق مع كلمة المرور",
   "login_successfully": "تم تسجيل الدخول بنجاح",
   "account_created_successfully": "تم إنشاء الحساب بنجاح",
-  "this_account_is_already_created_before": "تم إنشاء هذا الحساب بالفعل من قبل"
+  "this_account_is_already_created_before": "تم إنشاء هذا الحساب بالفعل من قبل",
+  "loading": "جاري التحميل",
+  "registered_successfully": "تم التسجيل بنجاح",
+  "no_user_found_for_that_email": "لم يتم العثور على مستخدم لهذا البريد الإلكتروني",
+  "wrong_password_provided_for_that_user": "تم إدخال كلمة مرور خاطئة لذلك المستخدم.",
+  "the_supplied_auth_credential_is_incorrect_malformed_or_has_expired": "بيانات اعتماد المصادقة المقدمة غير صحيحة",
+  "the_password_provided_is_too_weak": "كلمة المرور المقدمة ضعيفة جداً",
+  "the_account_already_exists_for_that_email": "الحساب موجود بالفعل لهذا البريد الإلكتروني",
+  "success": "نجاح",
+  "network_error": ""
 }

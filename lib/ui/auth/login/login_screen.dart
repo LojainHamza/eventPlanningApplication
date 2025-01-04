@@ -3,6 +3,7 @@ import 'package:event_planning_app/ui/auth/register/register_screen.dart';
 import 'package:event_planning_app/ui/home_screen/home_screen.dart';
 import 'package:event_planning_app/utils/MyAppColors.dart';
 import 'package:event_planning_app/utils/MyAppStyles.dart';
+import 'package:event_planning_app/utils/dialog_utils.dart';
 import 'package:event_planning_app/utils/myAssetsManager.dart';
 import 'package:event_planning_app/widgets/custom_elevated_button.dart';
 import 'package:event_planning_app/widgets/custom_text_field.dart';
@@ -20,8 +21,8 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool isObscure = true;
-  var emailController = TextEditingController(text: 'loj@gmail.com');
-  var passwordController = TextEditingController(text: '123456');
+  var emailController = TextEditingController();
+  var passwordController = TextEditingController();
   var formKey = GlobalKey<FormState>();
 
   @override
@@ -186,25 +187,42 @@ class _LoginScreenState extends State<LoginScreen> {
   }
   void login()async{
     if(formKey.currentState?.validate() == true){
+      DialogUtils.showLoading(context: context, message: 'Loading..');
       try {
         final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
             email: emailController.text,
             password: passwordController.text
         );
-        print('Login Successfully');
-        print(credential.user?.uid??"");
+        DialogUtils.hideLoading(context);
+        DialogUtils.showMessage(context: context, message: AppLocalizations.of(context)!.login_successfully,
+        title: AppLocalizations.of(context)!.success,posActionName: AppLocalizations.of(context)!.ok,
+        posAction: (){
+          Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
+        });
       }
       on FirebaseAuthException catch (e) {
         if (e.code == 'user-not-found') {
-          print('No user found for that email.');
+          DialogUtils.hideLoading(context);
+          DialogUtils.showMessage(context: context, message: AppLocalizations.of(context)!.no_user_found_for_that_email,
+          title: AppLocalizations.of(context)!.error,posActionName: AppLocalizations.of(context)!.ok);
         } else if (e.code == 'wrong-password') {
-          print('Wrong password provided for that user.');
+          DialogUtils.hideLoading(context);
+          DialogUtils.showMessage(context: context, message: AppLocalizations.of(context)!.wrong_password_provided_for_that_user,
+          title: AppLocalizations.of(context)!.error,posActionName: AppLocalizations.of(context)!.ok);
         } else if (e.code == 'invalid-credential') {
-          print('The supplied auth credential is incorrect, malformed or has expired.');
+          DialogUtils.hideLoading(context);
+          DialogUtils.showMessage(context: context, message: AppLocalizations.of(context)!.the_supplied_auth_credential_is_incorrect_malformed_or_has_expired,
+          title: AppLocalizations.of(context)!.error,posActionName: AppLocalizations.of(context)!.ok);
+        } else if (e.code == 'network-request-failed') {
+        DialogUtils.hideLoading(context);
+        DialogUtils.showMessage(context: context, message: AppLocalizations.of(context)!.network_error,
+            title: AppLocalizations.of(context)!.error,posActionName: AppLocalizations.of(context)!.ok);
       }
       }
       catch(e){
-        print(e.toString());
+        DialogUtils.hideLoading(context);
+        DialogUtils.showMessage(context: context, message: e.toString(),
+        title: AppLocalizations.of(context)!.error,posActionName: AppLocalizations.of(context)!.ok);
       }
     }
     //Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);

@@ -1,6 +1,7 @@
 import 'package:event_planning_app/ui/home_screen/home_screen.dart';
 import 'package:event_planning_app/utils/MyAppColors.dart';
 import 'package:event_planning_app/utils/MyAppStyles.dart';
+import 'package:event_planning_app/utils/dialog_utils.dart';
 import 'package:event_planning_app/utils/myAssetsManager.dart';
 import 'package:event_planning_app/widgets/custom_elevated_button.dart';
 import 'package:event_planning_app/widgets/custom_text_field.dart';
@@ -18,10 +19,10 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   bool isObscure = true;
-  var nameController = TextEditingController(text: 'Loj');
-  var emailController = TextEditingController(text: 'loj@gmail.com');
-  var passwordController = TextEditingController(text: '123456');
-  var rePasswordController = TextEditingController(text: '123456');
+  var nameController = TextEditingController();
+  var emailController = TextEditingController();
+  var passwordController = TextEditingController();
+  var rePasswordController = TextEditingController();
   var formKey = GlobalKey<FormState>();
 
   @override
@@ -186,21 +187,37 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
   void register()async{
     if(formKey.currentState?.validate() == true){
+      DialogUtils.showLoading(context: context, message: AppLocalizations.of(context)!.loading);
       try {
         final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: emailController.text,
           password: passwordController.text,
         );
-        print('register successfully');
-        print(credential.user?.uid??"");
+        DialogUtils.hideLoading(context);
+        DialogUtils.showMessage(context: context, message: AppLocalizations.of(context)!.registered_successfully,
+        title: AppLocalizations.of(context)!.success,posActionName: AppLocalizations.of(context)!.ok,
+        posAction: (){
+          Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
+        });
       } on FirebaseAuthException catch (e) {
         if (e.code == 'weak-password') {
-          print('The password provided is too weak.');
+          DialogUtils.hideLoading(context);
+          DialogUtils.showMessage(context: context, message: AppLocalizations.of(context)!.the_password_provided_is_too_weak,
+          title: AppLocalizations.of(context)!.error,posActionName: AppLocalizations.of(context)!.ok);
         } else if (e.code == 'email-already-in-use') {
-          print('The account already exists for that email.');
+          DialogUtils.hideLoading(context);
+          DialogUtils.showMessage(context: context, message: AppLocalizations.of(context)!.the_account_already_exists_for_that_email,
+          title: AppLocalizations.of(context)!.error,posActionName: AppLocalizations.of(context)!.ok);
+        }
+        else if (e.code == 'network-request-failed') {
+          DialogUtils.hideLoading(context);
+          DialogUtils.showMessage(context: context, message: AppLocalizations.of(context)!.network_error,
+              title: AppLocalizations.of(context)!.error,posActionName: AppLocalizations.of(context)!.ok);
         }
       } catch (e) {
-        print(e);
+        DialogUtils.hideLoading(context);
+        DialogUtils.showMessage(context: context, message: e.toString(),
+        title: AppLocalizations.of(context)!.error,posActionName: AppLocalizations.of(context)!.ok);
       }
     }
     //Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
