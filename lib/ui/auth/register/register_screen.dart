@@ -1,3 +1,5 @@
+import 'package:event_planning_app/firebase_utils.dart';
+import 'package:event_planning_app/model/myUser.dart';
 import 'package:event_planning_app/ui/home_screen/home_screen.dart';
 import 'package:event_planning_app/utils/MyAppColors.dart';
 import 'package:event_planning_app/utils/MyAppStyles.dart';
@@ -193,6 +195,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
           email: emailController.text,
           password: passwordController.text,
         );
+        MyUser myUser = MyUser(
+            id: credential.user?.uid?? '',
+            name: nameController.text,
+            email: emailController.text);
+        await FirebaseUtils.addUserToFireStore(myUser);
         DialogUtils.hideLoading(context);
         DialogUtils.showMessage(context: context, message: AppLocalizations.of(context)!.registered_successfully,
         title: AppLocalizations.of(context)!.success,posActionName: AppLocalizations.of(context)!.ok,

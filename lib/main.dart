@@ -21,7 +21,7 @@ void main()async{
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  await FirebaseFirestore.instance.disableNetwork();  // offline
+  // await FirebaseFirestore.instance.disableNetwork();  // offline
   runApp(
       MultiProvider(
     providers: [
@@ -29,7 +29,8 @@ void main()async{
       ChangeNotifierProvider(create: (context) => AppThemeProvider()),
       ChangeNotifierProvider(create: (context)=>EventsListProvider())
     ],
-      child: MyApp()));
+      child: MyApp())
+  );
 }
 class MyApp extends StatelessWidget {
 

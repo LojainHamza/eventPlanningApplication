@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_planning_app/model/event.dart';
+import 'package:event_planning_app/model/myUser.dart';
 
 class FirebaseUtils{
 
@@ -9,6 +10,19 @@ class FirebaseUtils{
         toFirestore: (event,_) => event.toFireStore()
     );
   }
+
+  static CollectionReference<MyUser> getUserCollection(){
+    return FirebaseFirestore.instance.collection(MyUser.collectionName).withConverter<MyUser>(
+        fromFirestore: (snapshot,option) => MyUser.fromJson(snapshot.data()!),
+        toFirestore: (user,options) => user.toJson()
+    );
+
+  }
+
+  static Future<void> addUserToFireStore(MyUser myUser){
+    return getUserCollection().doc(myUser.id).set(myUser);
+  }
+
   /// function saves data in database
   static Future<void> addEventToFireStore(Event event){
     CollectionReference<Event> collectionReference = getEventCollection();   // collection
@@ -17,6 +31,8 @@ class FirebaseUtils{
     return documentReference.set(event);
     //getEventCollection().doc().set(event);
   }
+
+
 }
 
 /*
