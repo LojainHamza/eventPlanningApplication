@@ -100,5 +100,10 @@
   "event_details": "تفاصيل الحدث",
   "edit_event": "تعديل الحدث",
   "save_changes": "حفظ التعديلات",
-  "failed_to_update_event": "فشل في تعديل الحدث"
+  "failed_to_update_event": "فشل في تعديل الحدث",
+  "warningMessage": "هل أنت متأكد من حذف هذا الحدث؟\nلا يمكن التراجع عن هذه العملية",
+  "warning": "تحذير",
+  "event_deleted_successfully": "تم حذف الحدث بنجاح",
+  "cancel": "إلغاء",
+  "failed_to_del_event": "فشل حذف الحدث"
 }

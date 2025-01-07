@@ -136,4 +136,15 @@ class EventsListProvider extends ChangeNotifier{
     }
   }
 
+  Future<void> deleteEvent(String eventId) async {
+    try {
+      await FirebaseFirestore.instance.collection(Event.collectionName).doc(eventId).delete();
+
+      eventsList.removeWhere((event) => event.id == eventId);
+      notifyListeners();
+    } catch (error) {
+      throw Exception('Error deleting event: $error');
+    }
+  }
+
 }

@@ -100,5 +100,10 @@
   "event_details": "Event Details",
   "edit_event": "Edit Event",
   "save_changes": "Save Changes",
-  "failed_to_update_event": "Failed To Update Event"
+  "failed_to_update_event": "Failed To Update Event",
+  "warningMessage": "Are You Sure About Deleting This Event?\nThis Process Can Not Be Undone",
+  "warning": "Warning",
+  "event_deleted_successfully": "Event Deleted Successfully",
+  "cancel": "Cancel",
+  "failed_to_del_event": "Failed To Delete Event"
 }

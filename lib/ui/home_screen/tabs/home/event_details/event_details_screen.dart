@@ -54,9 +54,72 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
           ),
           SizedBox(width: width * 0.02),
           InkWell(
-            onTap: () {},
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: Text(
+                      AppLocalizations.of(context)!.warning,
+                      style: MyAppStyles.medium16Primary,
+                    ),
+                    content: Text(
+                      AppLocalizations.of(context)!.warningMessage,
+                      style: MyAppStyles.medium16Black,
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text(
+                          AppLocalizations.of(context)!.cancel,
+                          style: MyAppStyles.medium16Primary,
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          try {
+                            await Provider.of<EventsListProvider>(context, listen: false)
+                                .deleteEvent(args.id);
+
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  AppLocalizations.of(context)!.event_deleted_successfully,
+                                  style: MyAppStyles.medium16White,
+                                ),
+                                backgroundColor: Colors.green,
+                              ),
+                            );
+                            Navigator.of(context).pop();
+                            Navigator.of(context).pop();
+                          } catch (error) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  '${AppLocalizations.of(context)!.failed_to_del_event}: $error',
+                                  style: MyAppStyles.medium16White,
+                                ),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                            Navigator.of(context).pop();
+                          }
+                        },
+                        child: Text(
+                          AppLocalizations.of(context)!.ok,
+                          style: MyAppStyles.medium16Primary,
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
             child: Image.asset(MyAssetsManager.deleteIcon),
           ),
+
           SizedBox(width: width * 0.02),
         ],
       ),
