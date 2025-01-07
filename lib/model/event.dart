@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Event {
   static const String collectionName = 'Events';
   String id;
@@ -20,16 +22,20 @@ class Event {
       this.isSelected = false});
 
   // json => object
-  Event.fromFireStore(Map<String, dynamic> data):this(
-    id: data['id'],
-    title: data['title'],
-    description: data['description'],
-    imagePath: data['imagePath'],
-    eventName: data['eventName'],
-    eventDate: DateTime.fromMillisecondsSinceEpoch(data['eventDate']),
-    eventTime: data['eventTime'],
-    isSelected: data['isSelected']
+  Event.fromFireStore(Map<String, dynamic> data)
+      : this(
+    id: data['id'] ?? '',
+    title: data['title'] ?? '',
+    description: data['description'] ?? '',
+    imagePath: data['imagePath'] ?? '',
+    eventName: data['eventName'] ?? '',
+    eventDate: (data['eventDate'] is Timestamp)
+        ? (data['eventDate'] as Timestamp).toDate()
+        : DateTime.fromMillisecondsSinceEpoch(data['eventDate'] ?? 0),
+    eventTime: data['eventTime'] ?? '',
+    isSelected: data['isSelected'] ?? false,
   );
+
 
   // object => json
   Map<String, dynamic> toFireStore() {
@@ -44,7 +50,6 @@ class Event {
       'isSelected': isSelected
     };
   }
-
 }
 
 /*

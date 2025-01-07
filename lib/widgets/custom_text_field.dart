@@ -18,9 +18,12 @@ class CustomTextField extends StatelessWidget {
   MyValidator validator;
   TextEditingController? controller;
   TextInputType? keyboardType;
+  Function(String?)? onSaved;
 
   CustomTextField(
-      {this.controller,
+      {
+      this.onSaved,
+      this.controller,
       this.validator,
       this.borderColor,
       required this.hintText,
@@ -32,11 +35,13 @@ class CustomTextField extends StatelessWidget {
       this.suffixIcon,
       this.obscureText = false,
       this.maxLines,
-      this.keyboardType = TextInputType.text});
+      this.keyboardType = TextInputType.text
+      });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      onSaved: onSaved,
       controller: controller,
       validator: validator,
       keyboardType: keyboardType,

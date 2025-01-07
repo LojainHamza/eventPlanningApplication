@@ -111,4 +111,29 @@ class EventsListProvider extends ChangeNotifier{
     ToastMessage.toastMessage(msg: AppLocalizations.of(context)!.event_updated_successfully);
     notifyListeners();
   }
+
+  Future<void> updateEvent(Event updatedEvent) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection(Event.collectionName)
+          .doc(updatedEvent.id)
+          .update({
+        'title': updatedEvent.title,
+        'description': updatedEvent.description,
+        'eventDate': updatedEvent.eventDate,
+        'eventTime': updatedEvent.eventTime,
+        'imagePath': updatedEvent.imagePath,
+        'eventName': updatedEvent.eventName,
+      });
+
+      int index = eventsList.indexWhere((event) => event.id == updatedEvent.id);
+      if (index != -1) {
+        eventsList[index] = updatedEvent;
+        notifyListeners();
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+
 }

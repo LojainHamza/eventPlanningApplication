@@ -96,5 +96,9 @@
   "the_password_provided_is_too_weak": "كلمة المرور المقدمة ضعيفة جداً",
   "the_account_already_exists_for_that_email": "الحساب موجود بالفعل لهذا البريد الإلكتروني",
   "success": "نجاح",
-  "network_error": ""
+  "network_error": "حدث خطأ في الشبكة (مثل انتهاء المهلة أو انقطاع الاتصال)",
+  "event_details": "تفاصيل الحدث",
+  "edit_event": "تعديل الحدث",
+  "save_changes": "حفظ التعديلات",
+  "failed_to_update_event": "فشل في تعديل الحدث"
 }

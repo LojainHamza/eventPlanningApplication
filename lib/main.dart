@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:event_planning_app/model/event.dart';
 import 'package:event_planning_app/providers/app_language_provider.dart';
 import 'package:event_planning_app/providers/app_theme_provider.dart';
 import 'package:event_planning_app/providers/events_list_provider.dart';
@@ -7,6 +8,9 @@ import 'package:event_planning_app/ui/auth/login/login_screen.dart';
 import 'package:event_planning_app/ui/auth/register/register_screen.dart';
 import 'package:event_planning_app/ui/home_screen/home_screen.dart';
 import 'package:event_planning_app/ui/home_screen/tabs/home/create_event/create_event_screen.dart';
+import 'package:event_planning_app/ui/home_screen/tabs/home/event_details/edit_event/edit_event_screen.dart';
+import 'package:event_planning_app/ui/home_screen/tabs/home/event_details/event_details_screen.dart';
+import 'package:event_planning_app/ui/home_screen/tabs/home/home_tab.dart';
 import 'package:event_planning_app/ui/onBoarding/onBoarding_view.dart';
 import 'package:event_planning_app/ui/onBoarding/start_screen.dart';
 import 'package:event_planning_app/utils/myAppThemes.dart';
@@ -46,7 +50,7 @@ class MyApp extends StatelessWidget {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       locale: Locale(languageProvider.appLanguage),
-      initialRoute: LoginScreen.routeName,
+      initialRoute: HomeScreen.routeName,
       routes: {
         StartScreen.routeName: (context) => StartScreen(),
         OnboardingView.routeName: (context) => OnboardingView(),
@@ -54,7 +58,15 @@ class MyApp extends StatelessWidget {
         RegisterScreen.routeName: (context) => RegisterScreen(),
         ForgetPassword.routeName: (context) => ForgetPassword(),
         HomeScreen.routeName: (context) => HomeScreen(),
-        CreateEventScreen.routeName: (context) => CreateEventScreen()
+        HomeTab.routeName: (context) =>HomeTab(),
+        CreateEventScreen.routeName: (context) => CreateEventScreen(),
+        EventDetailsScreen.routeName: (context) => EventDetailsScreen(),
+        EditEventScreen.routeName: (context) {
+          final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+          final event = args['event'] as Event;
+          final index = args['index'] as int;
+          return EditEventScreen(event: event, index: index);
+        },
       },
     );
   }

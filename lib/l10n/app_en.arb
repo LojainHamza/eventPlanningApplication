@@ -96,5 +96,9 @@
   "the_password_provided_is_too_weak": "The Password Provided Is Too Weak.",
   "the_account_already_exists_for_that_email": "The Account Already Exists For That Email.",
   "success": "Success",
-  "network_error": "حدث خطأ في الشبكة (مثل انتهاء المهلة أو انقطاع الاتصال)"
+  "network_error": "A network error has occurred (e.g. timeout or disconnection)",
+  "event_details": "Event Details",
+  "edit_event": "Edit Event",
+  "save_changes": "Save Changes",
+  "failed_to_update_event": "Failed To Update Event"
 }
