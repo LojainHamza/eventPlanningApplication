@@ -23,6 +23,11 @@ class FirebaseUtils{
     return getUserCollection().doc(myUser.id).set(myUser);
   }
 
+  static Future<MyUser?> readUserFromFireStore(String id)async{
+    var querySnapshot = await getUserCollection().doc(id).get();
+    return querySnapshot.data();
+  }
+
   /// function saves data in database
   static Future<void> addEventToFireStore(Event event){
     CollectionReference<Event> collectionReference = getEventCollection();   // collection
