@@ -29,6 +29,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: themeProvider.appTheme==ThemeMode.light?MyAppColors.whiteColor:MyAppColors.primaryDark,
         iconTheme: const IconThemeData(
           color: MyAppColors.primaryLight,
         ),
@@ -185,7 +186,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                           SizedBox(height: height * 0.01),
                           Text(
                             args.eventTime,
-                            style: MyAppStyles.medium16Black,
+                            style: themeProvider.appTheme==ThemeMode.light?MyAppStyles.medium16Black:MyAppStyles.medium16White,
                           ),
                         ],
                       ),
@@ -243,8 +244,8 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
               SizedBox(height: height * 0.02),
               Text(
                   AppLocalizations.of(context)!.description,
-                  style: MyAppStyles.medium16Black),
-              Text(args.description, style: MyAppStyles.medium16Black)
+                style: themeProvider.appTheme==ThemeMode.light?MyAppStyles.medium16Black:MyAppStyles.medium16White),
+              Text(args.description, style: themeProvider.appTheme==ThemeMode.light?MyAppStyles.medium16Black:MyAppStyles.medium16White)
             ],
           ),
         ),

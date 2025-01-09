@@ -1,3 +1,4 @@
+import 'package:event_planning_app/ui/home_screen/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -112,7 +113,7 @@ class _EditEventScreenState extends State<EditEventScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(AppLocalizations.of(context)!.event_updated_successfully)),
         );
-        Navigator.of(context).pop(updatedEvent);
+        Navigator.of(context).popAndPushNamed(HomeScreen.routeName);
       } catch (error) {
         String errorMessage =AppLocalizations.of(context)!.failed_to_update_event;
         ScaffoldMessenger.of(context).showSnackBar(
@@ -156,6 +157,7 @@ class _EditEventScreenState extends State<EditEventScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: themeProvider.appTheme==ThemeMode.light?MyAppColors.whiteColor:MyAppColors.primaryDark,
         iconTheme: const IconThemeData(color: MyAppColors.primaryLight),
         title: Text(
           AppLocalizations.of(context)!.edit_event,
@@ -222,6 +224,7 @@ class _EditEventScreenState extends State<EditEventScreen> {
                     CustomTextField(
                       controller: titleController,
                       hintText: AppLocalizations.of(context)!.eventTitle,
+                      style: TextStyle(color: themeProvider.appTheme==ThemeMode.light?MyAppColors.blackColor:MyAppColors.whiteColor),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return AppLocalizations.of(context)!
@@ -233,8 +236,7 @@ class _EditEventScreenState extends State<EditEventScreen> {
                       borderColor: themeProvider.appTheme == ThemeMode.light
                           ? MyAppColors.grayColor
                           : MyAppColors.primaryLight,
-                      style: MyAppStyles.medium16Black,
-                      hintStyle: MyAppStyles.medium16Gray,
+                      hintStyle: themeProvider.appTheme == ThemeMode.light?MyAppStyles.medium16Gray:MyAppStyles.medium16White,
                     ),
                     SizedBox(height: height * 0.01),
                     Text(
@@ -258,8 +260,8 @@ class _EditEventScreenState extends State<EditEventScreen> {
                       borderColor: themeProvider.appTheme == ThemeMode.light
                           ? MyAppColors.grayColor
                           : MyAppColors.primaryLight,
-                      style: MyAppStyles.medium16Black,
-                      hintStyle: MyAppStyles.medium16Gray,
+                      style: TextStyle(color: themeProvider.appTheme==ThemeMode.light?MyAppColors.blackColor:MyAppColors.whiteColor),
+                      hintStyle: themeProvider.appTheme == ThemeMode.light?MyAppStyles.medium16Gray:MyAppStyles.medium16White,
                     ),
                     SizedBox(height: height * 0.01),
                     ChooseDateOrTime(

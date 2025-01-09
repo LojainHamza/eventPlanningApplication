@@ -1,3 +1,5 @@
+import 'package:event_planning_app/providers/app_language_provider.dart';
+import 'package:event_planning_app/providers/app_theme_provider.dart';
 import 'package:event_planning_app/ui/auth/forget_password/forget_password_screen.dart';
 import 'package:event_planning_app/ui/auth/register/register_screen.dart';
 import 'package:event_planning_app/ui/home_screen/home_screen.dart';
@@ -11,6 +13,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   static const String routeName = 'loginScreen';
@@ -29,6 +32,8 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
+    var themeProvider = Provider.of<AppThemeProvider>(context);
+    var languageProvider = Provider.of<AppLanguageProvider>(context);
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: width * 0.03),
@@ -58,6 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                     keyboardType: TextInputType.emailAddress,
                     hintText: AppLocalizations.of(context)!.email,
+                    style: TextStyle(color: themeProvider.appTheme==ThemeMode.light?MyAppColors.blackColor:MyAppColors.whiteColor),
                     prefixIcon: Image.asset(MyAssetsManager.emailIcon)),
                 SizedBox(height: height * 0.02),
                 CustomTextField(
@@ -74,6 +80,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   keyboardType: TextInputType.phone,
                   obscureText: isObscure,
                   hintText: AppLocalizations.of(context)!.password,
+                  style: TextStyle(color: themeProvider.appTheme==ThemeMode.light?MyAppColors.blackColor:MyAppColors.whiteColor),
                   prefixIcon: Image.asset(MyAssetsManager.passwordIcon),
                   suffixIcon: IconButton(
                     icon: Icon(
@@ -112,7 +119,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   textAlign: TextAlign.center,
                     TextSpan(
                       children: [
-                        TextSpan(text: AppLocalizations.of(context)!.doNotHaveAccount,style: MyAppStyles.medium16Black),
+                        TextSpan(text: AppLocalizations.of(context)!.doNotHaveAccount,style: themeProvider.appTheme==ThemeMode.light?MyAppStyles.medium16Black:MyAppStyles.medium16White),
                         WidgetSpan(
                           child: SizedBox(width: width*0.03),
                         ),
@@ -173,8 +180,16 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Image.asset(MyAssetsManager.usaFlag),
-                      Image.asset(MyAssetsManager.egyptFlag)
+                      InkWell(
+                        onTap:(){
+                          languageProvider.changeLanguage('en');
+                          },
+                          child: Image.asset(MyAssetsManager.usaFlag)),
+                      InkWell(
+                          onTap:(){
+                            languageProvider.changeLanguage('ar');
+                          },
+                          child: Image.asset(MyAssetsManager.egyptFlag))
                     ],
                   ),
                 ),

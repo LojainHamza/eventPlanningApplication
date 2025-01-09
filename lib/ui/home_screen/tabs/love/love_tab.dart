@@ -1,3 +1,4 @@
+import 'package:event_planning_app/providers/app_theme_provider.dart';
 import 'package:event_planning_app/providers/events_list_provider.dart';
 import 'package:event_planning_app/ui/home_screen/tabs/home/event_item_widget.dart';
 import 'package:event_planning_app/utils/MyAppColors.dart';
@@ -13,6 +14,7 @@ class LoveTab extends StatelessWidget {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
     var eventsListProvider = Provider.of<EventsListProvider>(context);
+    var themeProvider = Provider.of<AppThemeProvider>(context);
 
     // if(eventsListProvider.favoriteEventList.isEmpty){
     //   eventsListProvider.getFavoriteEvents();
@@ -38,7 +40,7 @@ class LoveTab extends StatelessWidget {
                   ? Center(
                 child: Text(
                   AppLocalizations.of(context)!.no_fav_events_yet,
-                  style: MyAppStyles.medium18Black,
+                  style: themeProvider.appTheme==ThemeMode.light?MyAppStyles.medium16Black:MyAppStyles.medium16White,
                 ),
               )
                   : Padding(

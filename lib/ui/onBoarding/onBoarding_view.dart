@@ -44,6 +44,7 @@ class _OnboardingViewState extends State<OnboardingView> {
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: themeProvider.appTheme==ThemeMode.light?MyAppColors.whiteColor:MyAppColors.primaryDark,
         title: Image.asset(MyAssetsManager.eventTitleImage),
         centerTitle: true,
       ),
@@ -70,7 +71,7 @@ class _OnboardingViewState extends State<OnboardingView> {
                 SizedBox(height: height * 0.025),
                 Text(controller.items[index].title, style: MyAppStyles.bold20Primary),
                 SizedBox(height: height * 0.025),
-                Text(controller.items[index].description, style: MyAppStyles.medium16Black),
+                Text(controller.items[index].description, style: themeProvider.appTheme==ThemeMode.light?MyAppStyles.medium16Black:MyAppStyles.medium16White),
               ],
             ),
           );

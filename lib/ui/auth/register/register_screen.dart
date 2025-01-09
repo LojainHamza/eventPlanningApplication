@@ -1,5 +1,7 @@
 import 'package:event_planning_app/firebase_utils.dart';
 import 'package:event_planning_app/model/myUser.dart';
+import 'package:event_planning_app/providers/app_language_provider.dart';
+import 'package:event_planning_app/providers/app_theme_provider.dart';
 import 'package:event_planning_app/ui/home_screen/home_screen.dart';
 import 'package:event_planning_app/utils/MyAppColors.dart';
 import 'package:event_planning_app/utils/MyAppStyles.dart';
@@ -11,6 +13,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
 
 class RegisterScreen extends StatefulWidget {
   static const String routeName = 'registerScreen';
@@ -31,9 +34,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
+    var languageProvider = Provider.of<AppLanguageProvider>(context);
+    var themeProvider = Provider.of<AppThemeProvider>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.register,style: MyAppStyles.medium18Black),
+        iconTheme: IconThemeData(
+            color: themeProvider.appTheme==ThemeMode.light?MyAppColors.blackColor:MyAppColors.whiteColor
+        ),
+        backgroundColor: themeProvider.appTheme==ThemeMode.light?MyAppColors.whiteColor:MyAppColors.primaryDark,
+        title: Text(AppLocalizations.of(context)!.register,style: themeProvider.appTheme==ThemeMode.light?MyAppStyles.medium16Black:MyAppStyles.medium16White),
         centerTitle: true,
       ),
       body: Padding(
@@ -57,6 +66,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       return null;
                     },
                     hintText: AppLocalizations.of(context)!.name,
+                    style: TextStyle(color: themeProvider.appTheme==ThemeMode.light?MyAppColors.blackColor:MyAppColors.whiteColor),
                     prefixIcon: Image.asset(MyAssetsManager.nameIcon)
                 ),
                 SizedBox(height: height * 0.02),
@@ -76,6 +86,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     },
                     keyboardType: TextInputType.emailAddress,
                     hintText: AppLocalizations.of(context)!.email,
+                    style: TextStyle(color: themeProvider.appTheme==ThemeMode.light?MyAppColors.blackColor:MyAppColors.whiteColor),
                     prefixIcon: Image.asset(MyAssetsManager.emailIcon)
                 ),
                 SizedBox(height: height * 0.02),
@@ -93,6 +104,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   keyboardType: TextInputType.phone,
                   obscureText: isObscure,
                   hintText: AppLocalizations.of(context)!.password,
+                  style: TextStyle(color: themeProvider.appTheme==ThemeMode.light?MyAppColors.blackColor:MyAppColors.whiteColor),
                   prefixIcon: Image.asset(MyAssetsManager.passwordIcon),
                   suffixIcon: IconButton(
                     icon: Icon(
@@ -124,6 +136,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   keyboardType: TextInputType.phone,
                   obscureText: isObscure,
                   hintText: AppLocalizations.of(context)!.rePassword,
+                  style: TextStyle(color: themeProvider.appTheme==ThemeMode.light?MyAppColors.blackColor:MyAppColors.whiteColor),
                   prefixIcon: Image.asset(MyAssetsManager.passwordIcon),
                   suffixIcon: IconButton(
                     icon: Icon(
@@ -145,7 +158,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   textAlign: TextAlign.center,
                     TextSpan(
                       children: [
-                        TextSpan(text: AppLocalizations.of(context)!.alreadyHaveAccount,style: MyAppStyles.medium16Black),
+                        TextSpan(text: AppLocalizations.of(context)!.alreadyHaveAccount,style: themeProvider.appTheme==ThemeMode.light?MyAppStyles.medium16Black:MyAppStyles.medium16White),
                         WidgetSpan(
                           child: SizedBox(width: width*0.03),
                         ),
@@ -175,8 +188,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Image.asset(MyAssetsManager.usaFlag),
-                      Image.asset(MyAssetsManager.egyptFlag)
+                      InkWell(
+                          onTap:(){
+                            languageProvider.changeLanguage('en');
+                          },
+                          child: Image.asset(MyAssetsManager.usaFlag)),
+                      InkWell(
+                          onTap:(){
+                            languageProvider.changeLanguage('ar');
+                          },
+                          child: Image.asset(MyAssetsManager.egyptFlag))
                     ],
                   ),
                 ),
