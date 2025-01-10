@@ -11,6 +11,8 @@ class Event {
   String eventTime;
   bool isSelected;
 
+  static List<Event> eventList = [];
+
   Event(
       {this.id = '',
       required this.title,

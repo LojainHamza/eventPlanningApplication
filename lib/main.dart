@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       locale: Locale(languageProvider.appLanguage),
-      initialRoute: LoginScreen.routeName,
+      initialRoute: HomeScreen.routeName,
       routes: {
         StartScreen.routeName: (context) => StartScreen(),
         OnboardingView.routeName: (context) => OnboardingView(),

@@ -8,17 +8,27 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class LoveTab extends StatelessWidget {
+class LoveTab extends StatefulWidget {
+  @override
+  _LoveTabState createState() => _LoveTabState();
+}
+
+class _LoveTabState extends State<LoveTab> {
+  String searchText = '';
+
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
     var eventsListProvider = Provider.of<EventsListProvider>(context);
     var themeProvider = Provider.of<AppThemeProvider>(context);
-
-    // if(eventsListProvider.favoriteEventList.isEmpty){
-    //   eventsListProvider.getFavoriteEvents();
-    // }
+    var filteredEvents = eventsListProvider.favoritesList.where((event) {
+      return event.title.toLowerCase().contains(searchText.toLowerCase()) ||
+          event.description.toLowerCase().contains(searchText.toLowerCase()) ||
+          event.eventName.toLowerCase().contains(searchText.toLowerCase()) ||
+          event.eventDate.toString().contains(searchText) ||
+          event.eventTime.toLowerCase().contains(searchText.toLowerCase());
+    }).toList();
 
     return Scaffold(
       body: Padding(
@@ -28,7 +38,12 @@ class LoveTab extends StatelessWidget {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: width * 0.02),
               child: CustomTextField(
-                style: MyAppStyles.medium16Primary,
+                onChanged: (text) {
+                  setState(() {
+                    searchText = text!;
+                  });
+                },
+                style: themeProvider.appTheme==ThemeMode.light?MyAppStyles.medium16Black:MyAppStyles.medium16White,
                 borderColor: MyAppColors.primaryLight,
                 hintText: AppLocalizations.of(context)!.search_for_event,
                 hintStyle: MyAppStyles.bold14Primary,
@@ -36,40 +51,25 @@ class LoveTab extends StatelessWidget {
               ),
             ),
             Expanded(
-              child: eventsListProvider.favoritesList.isEmpty
+              child: filteredEvents.isEmpty
                   ? Center(
                 child: Text(
                   AppLocalizations.of(context)!.no_fav_events_yet,
-                  style: themeProvider.appTheme==ThemeMode.light?MyAppStyles.medium16Black:MyAppStyles.medium16White,
+                  style: themeProvider.appTheme == ThemeMode.light
+                      ? MyAppStyles.medium16Black
+                      : MyAppStyles.medium16White,
                 ),
               )
                   : Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: width*0.03,
-                    ),
-                    child: ListView.builder(
-                                    itemCount: eventsListProvider.favoritesList.length,
-                                    itemBuilder: (context, index) {
-                    return EventItemWidget(event: eventsListProvider.favoritesList[index]);
-                                    },
-                                  ),
-                  ),
+                padding: EdgeInsets.symmetric(horizontal: width * 0.03),
+                child: ListView.builder(
+                  itemCount: filteredEvents.length,
+                  itemBuilder: (context, index) {
+                    return EventItemWidget(event: filteredEvents[index]);
+                  },
+                ),
+              ),
             ),
-            // Expanded(
-            //   child: eventsListProvider.favoriteEventList.isEmpty
-            //       ? Center(
-            //     child: Text(
-            //       AppLocalizations.of(context)!.no_fav_events_yet,
-            //       style: MyAppStyles.medium18Black,
-            //     ),
-            //   )
-            //       : ListView.builder(
-            //     itemCount: eventsListProvider.favoriteEventList.length,
-            //     itemBuilder: (context, index) {
-            //       return EventItemWidget(event: eventsListProvider.favoriteEventList[index]);
-            //     },
-            //   ),
-            // ),
           ],
         ),
       ),
