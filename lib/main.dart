@@ -3,6 +3,7 @@ import 'package:event_planning_app/model/event.dart';
 import 'package:event_planning_app/providers/app_language_provider.dart';
 import 'package:event_planning_app/providers/app_theme_provider.dart';
 import 'package:event_planning_app/providers/events_list_provider.dart';
+import 'package:event_planning_app/providers/user_provider.dart';
 import 'package:event_planning_app/ui/auth/forget_password/forget_password_screen.dart';
 import 'package:event_planning_app/ui/auth/login/login_screen.dart';
 import 'package:event_planning_app/ui/auth/register/register_screen.dart';
@@ -31,7 +32,8 @@ void main()async{
     providers: [
       ChangeNotifierProvider(create: (context) => AppLanguageProvider()),
       ChangeNotifierProvider(create: (context) => AppThemeProvider()),
-      ChangeNotifierProvider(create: (context)=>EventsListProvider())
+      ChangeNotifierProvider(create: (context)=>EventsListProvider()),
+      ChangeNotifierProvider(create: (context) => UserProvider())
     ],
       child: MyApp())
   );
@@ -50,7 +52,7 @@ class MyApp extends StatelessWidget {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       locale: Locale(languageProvider.appLanguage),
-      initialRoute: HomeScreen.routeName,
+      initialRoute: LoginScreen.routeName,
       routes: {
         StartScreen.routeName: (context) => StartScreen(),
         OnboardingView.routeName: (context) => OnboardingView(),

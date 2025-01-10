@@ -4,5 +4,8 @@ import 'package:flutter/material.dart';
 class UserProvider extends ChangeNotifier{
   MyUser? currentUser;
 
-  static updateUser(){}
+  void updateUser(MyUser newUser){
+    currentUser = newUser;
+    notifyListeners();
+  }
 }

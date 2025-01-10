@@ -1,6 +1,7 @@
 import 'package:event_planning_app/providers/app_language_provider.dart';
 import 'package:event_planning_app/providers/app_theme_provider.dart';
 import 'package:event_planning_app/providers/events_list_provider.dart';
+import 'package:event_planning_app/providers/user_provider.dart';
 import 'package:event_planning_app/ui/home_screen/tabs/home/event_item_widget.dart';
 import 'package:event_planning_app/ui/home_screen/tabs/home/tab_event_widget.dart';
 import 'package:event_planning_app/utils/MyAppStyles.dart';
@@ -20,6 +21,7 @@ class _HomeTabState extends State<HomeTab> {
   @override
   Widget build(BuildContext context) {
     var eventListProvider = Provider.of<EventsListProvider>(context);
+    var userProvider = Provider.of<UserProvider>(context);
     eventListProvider.getEventsNameList(context);
     if (eventListProvider.eventsList.isEmpty) {
       eventListProvider.getAllEvents();
@@ -43,7 +45,7 @@ class _HomeTabState extends State<HomeTab> {
               children: [
                 Text(AppLocalizations.of(context)!.welcome_back,
                     style: MyAppStyles.regular14White),
-                Text('John Safwat', style: MyAppStyles.bold24White)
+                Text(userProvider.currentUser!.name, style: MyAppStyles.bold24White)
               ],
             ),
             Row(

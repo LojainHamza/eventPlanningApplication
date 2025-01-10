@@ -2,6 +2,7 @@ import 'package:event_planning_app/firebase_utils.dart';
 import 'package:event_planning_app/model/myUser.dart';
 import 'package:event_planning_app/providers/app_language_provider.dart';
 import 'package:event_planning_app/providers/app_theme_provider.dart';
+import 'package:event_planning_app/providers/user_provider.dart';
 import 'package:event_planning_app/ui/auth/forget_password/forget_password_screen.dart';
 import 'package:event_planning_app/ui/auth/register/register_screen.dart';
 import 'package:event_planning_app/ui/home_screen/home_screen.dart';
@@ -214,6 +215,8 @@ class _LoginScreenState extends State<LoginScreen> {
         if(user == null){   // if user is not found in firebase fireStore
           return;
         }
+        var userProvider = Provider.of<UserProvider>(context,listen:false);
+        userProvider.updateUser(user);
         DialogUtils.hideLoading(context);
         DialogUtils.showMessage(context: context, message: AppLocalizations.of(context)!.login_successfully,
         title: AppLocalizations.of(context)!.success,posActionName: AppLocalizations.of(context)!.ok,
