@@ -21,29 +21,30 @@ import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
-void main()async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  // await FirebaseFirestore.instance.disableNetwork();  // offline
   runApp(
-      MultiProvider(
-    providers: [
-      ChangeNotifierProvider(create: (context) => AppLanguageProvider()),
-      ChangeNotifierProvider(create: (context) => AppThemeProvider()),
-      ChangeNotifierProvider(create: (context)=>EventsListProvider()),
-      ChangeNotifierProvider(create: (context) => UserProvider())
-    ],
-      child: MyApp())
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => AppLanguageProvider()),
+        ChangeNotifierProvider(create: (context) => AppThemeProvider()),
+        ChangeNotifierProvider(create: (context) => EventsListProvider()),
+        ChangeNotifierProvider(create: (context) => UserProvider())
+      ],
+      child: MyApp(),
+    ),
   );
 }
-class MyApp extends StatelessWidget {
 
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var languageProvider = Provider.of<AppLanguageProvider>(context);
     var themeProvider = Provider.of<AppThemeProvider>(context);
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: MyAppThemes.lightTheme,
@@ -60,9 +61,14 @@ class MyApp extends StatelessWidget {
         RegisterScreen.routeName: (context) => RegisterScreen(),
         ForgetPassword.routeName: (context) => ForgetPassword(),
         HomeScreen.routeName: (context) => HomeScreen(),
-        HomeTab.routeName: (context) =>HomeTab(),
+        HomeTab.routeName: (context) => HomeTab(),
         CreateEventScreen.routeName: (context) => CreateEventScreen(),
-        EventDetailsScreen.routeName: (context) => EventDetailsScreen(),
+        EventDetailsScreen.routeName: (context) {
+          final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+          final event = args['event'] as Event;
+          final uId = args['uId'] as String;
+          return EventDetailsScreen(event: event, uId: uId);
+        },
         EditEventScreen.routeName: (context) {
           final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
           final event = args['event'] as Event;

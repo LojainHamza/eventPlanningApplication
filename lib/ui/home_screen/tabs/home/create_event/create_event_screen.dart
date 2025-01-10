@@ -2,6 +2,7 @@ import 'package:event_planning_app/firebase_utils.dart';
 import 'package:event_planning_app/model/event.dart';
 import 'package:event_planning_app/providers/app_theme_provider.dart';
 import 'package:event_planning_app/providers/events_list_provider.dart';
+import 'package:event_planning_app/providers/user_provider.dart';
 import 'package:event_planning_app/ui/home_screen/tabs/home/tab_event_widget.dart';
 import 'package:event_planning_app/utils/MyAppColors.dart';
 import 'package:event_planning_app/utils/MyAppStyles.dart';
@@ -130,13 +131,6 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                     ),
                     SizedBox(height: height * 0.01),
                     CustomTextField(
-                      // validator: (text) {
-                      //   if (text == null || text.isEmpty) {
-                      //     return AppLocalizations.of(context)!
-                      //         .please_enter_event_title;
-                      //   }
-                      //   return null;
-                      // },
                       controller: titleController,
                       hintText: AppLocalizations.of(context)!.eventTitle,
                       prefixIcon: Image.asset(MyAssetsManager.noteEditIcon),
@@ -153,13 +147,6 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                     ),
                     SizedBox(height: height * 0.01),
                     CustomTextField(
-                      // validator: (text) {
-                      //   if (text == null || text.isEmpty) {
-                      //     return AppLocalizations.of(context)!
-                      //         .please_enter_event_description;
-                      //   }
-                      //   return null;
-                      // },
                       controller: descriptionController,
                       hintText: AppLocalizations.of(context)!.eventDescription,
                       maxLines: 4,
@@ -174,7 +161,6 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                       chooseEventNameOrTime: selectedDate == null
                           ? AppLocalizations.of(context)!.chooseDate
                           : DateFormat('dd/MM/yyyy').format(selectedDate!),
-                      //formatedDate,
                       onChooseDateOrTime: chooseDate,
                     ),
                     SizedBox(height: height * 0.01),
@@ -302,7 +288,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
       if (errorMessages.isNotEmpty) {
         showErrorDialog(errorMessages);
       } else {
-        // todo: Add event logic here (save to database)
+        // Add event logic here (save to database)
         Event event = Event(
             title: titleController.text,
             description: descriptionController.text,
@@ -310,36 +296,46 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
             eventName: selectedEvent,
             eventDate: selectedDate!,
             eventTime: formatedTime);
-        FirebaseUtils.addEventToFireStore(event).timeout(const Duration(milliseconds: 500),
-            onTimeout: (){
-          eventListProvider.getAllEvents(); // <= refresh eventsList
+        var userProvider = Provider.of<UserProvider>(context, listen: false);
+        FirebaseUtils.addEventToFireStore(event, userProvider.currentUser!.id)
+            .then((value) {
+          eventListProvider.getAllEvents(userProvider.currentUser!.id); // Refresh events list
           Navigator.of(context).pop();
-          Fluttertoast.showToast(msg: AppLocalizations.of(context)!.event_added_successfully);
+          Fluttertoast.showToast(
+              msg: AppLocalizations.of(context)!.event_added_successfully);
+        }).timeout(const Duration(milliseconds: 500), onTimeout: () {
+          eventListProvider.getAllEvents(userProvider.currentUser!.id); // Refresh events list
+          Navigator.of(context).pop();
+          Fluttertoast.showToast(
+              msg: AppLocalizations.of(context)!.event_added_successfully);
         });
       }
     }
   }
 
-  void showErrorDialog(List<String> messages) {
+  void showErrorDialog(List<String> errorMessages) {
     showDialog(
       context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(AppLocalizations.of(context)!.error,style: MyAppStyles.bold14Black),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: messages.map((message) => Text(message,style: MyAppStyles.medium16Black)).toList(),
+      builder: (context) => AlertDialog(
+        title: Text(AppLocalizations.of(context)!.error),
+        content: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: errorMessages
+              .map((msg) => Padding(
+            padding: const EdgeInsets.only(bottom: 8.0),
+            child: Text(msg),
+          ))
+              .toList(),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text(AppLocalizations.of(context)!.ok),
           ),
-          actions: [
-            TextButton(
-              child: Text(AppLocalizations.of(context)!.ok,style: MyAppStyles.bold14Black),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
+        ],
+      ),
     );
   }
 }

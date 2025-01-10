@@ -6,6 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:event_planning_app/model/event.dart';
 import 'package:event_planning_app/providers/app_theme_provider.dart';
 import 'package:event_planning_app/providers/events_list_provider.dart';
+import 'package:event_planning_app/providers/user_provider.dart';
 import 'package:event_planning_app/ui/home_screen/tabs/home/tab_event_widget.dart';
 import 'package:event_planning_app/utils/MyAppColors.dart';
 import 'package:event_planning_app/utils/MyAppStyles.dart';
@@ -59,32 +60,40 @@ class _EditEventScreenState extends State<EditEventScreen> {
   @override
   void initState() {
     super.initState();
+
+    // Initialize controllers with the current event's data
     titleController = TextEditingController(text: widget.event.title);
     descriptionController = TextEditingController(text: widget.event.description);
     selectedDate = widget.event.eventDate;
+
+    // Correctly initialize selected index if it falls out of bounds
     selectedIndex = widget.index;
-    if (selectedIndex == -1) {
+    if (selectedIndex < 0 || selectedIndex >= eventsNameList.length) {
       selectedIndex = 0;
     }
-    final timeMatch = RegExp(r'(\d+):(\d+) ?([AP]M)?')
-        .firstMatch(widget.event.eventTime);
+
+    // Parse and initialize selected time correctly
+    selectedTime = _parseTime(widget.event.eventTime) ?? TimeOfDay.now();
+  }
+
+  // Helper function to parse event time and handle errors gracefully
+  TimeOfDay? _parseTime(String time) {
+    final timeMatch = RegExp(r'(\d+):(\d+)(?: ?([AP]M))?').firstMatch(time);
     if (timeMatch != null) {
       final hour = int.parse(timeMatch.group(1)!);
       final minute = int.parse(timeMatch.group(2)!);
       final meridian = timeMatch.group(3);
 
       if (meridian != null) {
-        if (meridian == 'PM' && hour != 12) {
-          selectedTime = TimeOfDay(hour: hour + 12, minute: minute);
-        } else {
-          selectedTime = TimeOfDay(hour: hour, minute: minute);
-        }
+        return meridian == 'PM' && hour != 12
+            ? TimeOfDay(hour: hour + 12, minute: minute)
+            : TimeOfDay(hour: hour % 12, minute: minute);
       } else {
-        selectedTime = TimeOfDay(hour: hour, minute: minute);
+        // Handle 24-hour time format
+        return TimeOfDay(hour: hour, minute: minute);
       }
-    } else {
-      selectedTime = TimeOfDay.now();
     }
+    return null; // Return null if parsing fails
   }
 
   @override
@@ -97,27 +106,50 @@ class _EditEventScreenState extends State<EditEventScreen> {
   Future<void> saveEvent() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
+
       final timeString = selectedTime.format(context);
+
+      // Create the updated event object
       final updatedEvent = Event(
         id: widget.event.id,
-        title: titleController.text,
-        description: descriptionController.text,
+        title: titleController.text.trim(),
+        description: descriptionController.text.trim(),
         eventDate: selectedDate,
         eventTime: timeString,
         imagePath: eventImages[selectedIndex],
         eventName: eventsNameList[selectedIndex],
       );
+
       try {
+        var userProvider = Provider.of<UserProvider>(context, listen: false);
+        var userId = userProvider.currentUser!.id; // Replace with actual user ID retrieval logic
+
+        // Debugging: Print user ID and event ID
+        print('User ID: $userId');
+        print('Event ID: ${updatedEvent.id}');
+
+        // Call updateEvent with the correct parameters
         await Provider.of<EventsListProvider>(context, listen: false)
-            .updateEvent(updatedEvent);
+            .updateEvent(userId, updatedEvent);
+
+        // Success message
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(AppLocalizations.of(context)!.event_updated_successfully)),
+          SnackBar(
+            content: Text(AppLocalizations.of(context)!.event_updated_successfully),
+            backgroundColor: Colors.green,
+          ),
         );
-        Navigator.of(context).popAndPushNamed(HomeScreen.routeName);
+
+        // Navigate back after successful update
+        Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
       } catch (error) {
-        String errorMessage =AppLocalizations.of(context)!.failed_to_update_event;
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('$errorMessage: $error')),
+          SnackBar(
+            content: Text(
+              '${AppLocalizations.of(context)!.failed_to_update_event}: $error',
+            ),
+            backgroundColor: Colors.red,
+          ),
         );
       }
     }
@@ -130,7 +162,7 @@ class _EditEventScreenState extends State<EditEventScreen> {
       firstDate: DateTime.now(),
       lastDate: DateTime.now().add(const Duration(days: 365)),
     );
-    if (pickedDate != null && pickedDate != selectedDate) {
+    if (pickedDate != null) {
       setState(() {
         selectedDate = pickedDate;
       });
@@ -142,7 +174,7 @@ class _EditEventScreenState extends State<EditEventScreen> {
       context: context,
       initialTime: selectedTime,
     );
-    if (pickedTime != null && pickedTime != selectedTime) {
+    if (pickedTime != null) {
       setState(() {
         selectedTime = pickedTime;
       });
@@ -157,7 +189,7 @@ class _EditEventScreenState extends State<EditEventScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: themeProvider.appTheme==ThemeMode.light?MyAppColors.whiteColor:MyAppColors.primaryDark,
+        backgroundColor: themeProvider.appTheme == ThemeMode.light ? MyAppColors.whiteColor : MyAppColors.primaryDark,
         iconTheme: const IconThemeData(color: MyAppColors.primaryLight),
         title: Text(
           AppLocalizations.of(context)!.edit_event,
@@ -224,11 +256,10 @@ class _EditEventScreenState extends State<EditEventScreen> {
                     CustomTextField(
                       controller: titleController,
                       hintText: AppLocalizations.of(context)!.eventTitle,
-                      style: TextStyle(color: themeProvider.appTheme==ThemeMode.light?MyAppColors.blackColor:MyAppColors.whiteColor),
+                      style: TextStyle(color: themeProvider.appTheme == ThemeMode.light ? MyAppColors.blackColor : MyAppColors.whiteColor),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return AppLocalizations.of(context)!
-                              .please_enter_event_title;
+                          return AppLocalizations.of(context)!.please_enter_event_title;
                         }
                         return null;
                       },
@@ -236,7 +267,7 @@ class _EditEventScreenState extends State<EditEventScreen> {
                       borderColor: themeProvider.appTheme == ThemeMode.light
                           ? MyAppColors.grayColor
                           : MyAppColors.primaryLight,
-                      hintStyle: themeProvider.appTheme == ThemeMode.light?MyAppStyles.medium16Gray:MyAppStyles.medium16White,
+                      hintStyle: themeProvider.appTheme == ThemeMode.light ? MyAppStyles.medium16Gray : MyAppStyles.medium16White,
                     ),
                     SizedBox(height: height * 0.01),
                     Text(
@@ -252,31 +283,27 @@ class _EditEventScreenState extends State<EditEventScreen> {
                       maxLines: 4,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return AppLocalizations.of(context)!
-                              .please_enter_event_description;
+                          return AppLocalizations.of(context)!.please_enter_event_description;
                         }
                         return null;
                       },
                       borderColor: themeProvider.appTheme == ThemeMode.light
                           ? MyAppColors.grayColor
                           : MyAppColors.primaryLight,
-                      style: TextStyle(color: themeProvider.appTheme==ThemeMode.light?MyAppColors.blackColor:MyAppColors.whiteColor),
-                      hintStyle: themeProvider.appTheme == ThemeMode.light?MyAppStyles.medium16Gray:MyAppStyles.medium16White,
+                      style: TextStyle(color: themeProvider.appTheme == ThemeMode.light ? MyAppColors.blackColor : MyAppColors.whiteColor),
+                      hintStyle: themeProvider.appTheme == ThemeMode.light ? MyAppStyles.medium16Gray : MyAppStyles.medium16White,
                     ),
                     SizedBox(height: height * 0.01),
                     ChooseDateOrTime(
                       iconName: MyAssetsManager.calenderIcon,
-                      eventNameOrTime:
-                      AppLocalizations.of(context)!.eventDate,
-                      chooseEventNameOrTime:
-                      DateFormat('dd/MM/yyyy').format(selectedDate),
+                      eventNameOrTime: AppLocalizations.of(context)!.eventDate,
+                      chooseEventNameOrTime: DateFormat('dd/MM/yyyy').format(selectedDate),
                       onChooseDateOrTime: chooseDate,
                     ),
                     SizedBox(height: height * 0.01),
                     ChooseDateOrTime(
                       iconName: MyAssetsManager.clockIcon,
-                      eventNameOrTime:
-                      AppLocalizations.of(context)!.eventTime,
+                      eventNameOrTime: AppLocalizations.of(context)!.eventTime,
                       chooseEventNameOrTime: selectedTime.format(context),
                       onChooseDateOrTime: chooseTime,
                     ),

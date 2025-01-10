@@ -2,6 +2,7 @@ import 'package:event_planning_app/model/event.dart';
 import 'package:event_planning_app/providers/app_language_provider.dart';
 import 'package:event_planning_app/providers/app_theme_provider.dart';
 import 'package:event_planning_app/providers/events_list_provider.dart';
+import 'package:event_planning_app/providers/user_provider.dart';
 import 'package:event_planning_app/ui/home_screen/tabs/home/event_details/event_details_screen.dart';
 import 'package:event_planning_app/utils/MyAppColors.dart';
 import 'package:event_planning_app/utils/MyAppStyles.dart';
@@ -11,7 +12,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class EventItemWidget extends StatefulWidget {
-  Event event;
+  final Event event;
   EventItemWidget({required this.event});
 
   @override
@@ -26,6 +27,7 @@ class _EventItemWidgetState extends State<EventItemWidget> {
     var themeProvider = Provider.of<AppThemeProvider>(context);
     var languageProvider = Provider.of<AppLanguageProvider>(context);
     var eventsListProvider = Provider.of<EventsListProvider>(context);
+    var userProvider = Provider.of<UserProvider>(context);
 
     String monthName;
     if (languageProvider.appLanguage == 'ar') {
@@ -35,10 +37,13 @@ class _EventItemWidgetState extends State<EventItemWidget> {
     }
 
     return InkWell(
-      onTap: (){
+      onTap: () {
         Navigator.of(context).pushNamed(
           EventDetailsScreen.routeName,
-          arguments: widget.event,
+          arguments: {
+            'event': widget.event,
+            'uId': userProvider.currentUser!.id,
+          },
         );
       },
       child: Container(
@@ -67,7 +72,6 @@ class _EventItemWidgetState extends State<EventItemWidget> {
                 children: [
                   Text(widget.event.eventDate.day.toString(), style: MyAppStyles.bold20Primary),
                   Text(monthName, style: MyAppStyles.bold20Primary),
-                  // Text(DateFormat('MMM').format(widget.event.eventDate), style: MyAppStyles.bold20Primary),
                 ],
               ),
             ),
@@ -91,9 +95,9 @@ class _EventItemWidgetState extends State<EventItemWidget> {
                       setState(() {
                         widget.event.isSelected = !widget.event.isSelected;
                         if (widget.event.isSelected) {
-                          eventsListProvider.addEventToFavorites(widget.event,context);
+                          eventsListProvider.addEventToFavorites(widget.event, context);
                         } else {
-                          eventsListProvider.removeEventFromFavorites(widget.event,context);
+                          eventsListProvider.removeEventFromFavorites(widget.event, context);
                         }
                       });
                     },
@@ -101,18 +105,6 @@ class _EventItemWidgetState extends State<EventItemWidget> {
                       widget.event.isSelected ? MyAssetsManager.loveSelected : MyAssetsManager.loveUnSelected,
                       color: MyAppColors.primaryLight,
                     ),
-                  // InkWell(
-                  //   onTap: () {
-                  //     // Update favorite status
-                  //     eventsListProvider.updateFavoriteEvent(widget.event,context);
-                  //   },
-                  //   child: Image.asset(
-                  //     widget.event.isSelected == true
-                  //         ? MyAssetsManager.loveSelected
-                  //         : MyAssetsManager.loveUnSelected,
-                  //     color: MyAppColors.primaryLight,
-                  //   ),
-                  // ),
                   )
                 ],
               ),

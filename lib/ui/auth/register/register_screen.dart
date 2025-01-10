@@ -209,8 +209,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ),
     );
   }
-  void register()async{
-    if(formKey.currentState?.validate() == true){
+  void register() async {
+    if (formKey.currentState?.validate() == true) {
       DialogUtils.showLoading(context: context, message: AppLocalizations.of(context)!.loading);
       try {
         final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
@@ -218,39 +218,36 @@ class _RegisterScreenState extends State<RegisterScreen> {
           password: passwordController.text,
         );
         MyUser myUser = MyUser(
-            id: credential.user?.uid?? '',
+            id: credential.user?.uid ?? '',
             name: nameController.text,
             email: emailController.text);
-        var userProvider = Provider.of<UserProvider>(context,listen:false);
+        var userProvider = Provider.of<UserProvider>(context, listen: false);
         userProvider.updateUser(myUser);
         await FirebaseUtils.addUserToFireStore(myUser);
         DialogUtils.hideLoading(context);
         DialogUtils.showMessage(context: context, message: AppLocalizations.of(context)!.registered_successfully,
-        title: AppLocalizations.of(context)!.success,posActionName: AppLocalizations.of(context)!.ok,
-        posAction: (){
-          Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
-        });
+            title: AppLocalizations.of(context)!.success, posActionName: AppLocalizations.of(context)!.ok,
+            posAction: () {
+              Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
+            });
       } on FirebaseAuthException catch (e) {
+        DialogUtils.hideLoading(context);
         if (e.code == 'weak-password') {
-          DialogUtils.hideLoading(context);
           DialogUtils.showMessage(context: context, message: AppLocalizations.of(context)!.the_password_provided_is_too_weak,
-          title: AppLocalizations.of(context)!.error,posActionName: AppLocalizations.of(context)!.ok);
+              title: AppLocalizations.of(context)!.error, posActionName: AppLocalizations.of(context)!.ok);
         } else if (e.code == 'email-already-in-use') {
-          DialogUtils.hideLoading(context);
           DialogUtils.showMessage(context: context, message: AppLocalizations.of(context)!.the_account_already_exists_for_that_email,
-          title: AppLocalizations.of(context)!.error,posActionName: AppLocalizations.of(context)!.ok);
-        }
-        else if (e.code == 'network-request-failed') {
-          DialogUtils.hideLoading(context);
+              title: AppLocalizations.of(context)!.error, posActionName: AppLocalizations.of(context)!.ok);
+        } else if (e.code == 'network-request-failed') {
           DialogUtils.showMessage(context: context, message: AppLocalizations.of(context)!.network_error,
-              title: AppLocalizations.of(context)!.error,posActionName: AppLocalizations.of(context)!.ok);
+              title: AppLocalizations.of(context)!.error, posActionName: AppLocalizations.of(context)!.ok);
         }
       } catch (e) {
         DialogUtils.hideLoading(context);
         DialogUtils.showMessage(context: context, message: e.toString(),
-        title: AppLocalizations.of(context)!.error,posActionName: AppLocalizations.of(context)!.ok);
+            title: AppLocalizations.of(context)!.error, posActionName: AppLocalizations.of(context)!.ok);
       }
     }
-    //Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
   }
+
 }

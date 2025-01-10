@@ -12,6 +12,11 @@ import 'package:provider/provider.dart';
 
 class EventDetailsScreen extends StatefulWidget {
   static const String routeName = 'eventDetails';
+  final Event event;  // Declare event as a final variable
+  final String uId;   // Declare user ID as a final variable
+
+  // Constructor accepting event and user ID
+  EventDetailsScreen({required this.event, required this.uId});
 
   @override
   State<EventDetailsScreen> createState() => _EventDetailsScreenState();
@@ -20,16 +25,19 @@ class EventDetailsScreen extends StatefulWidget {
 class _EventDetailsScreenState extends State<EventDetailsScreen> {
   @override
   Widget build(BuildContext context) {
-    var args = ModalRoute.of(context)?.settings.arguments as Event;
+    var event = widget.event;  // Access the event from the widget
+    var uId = widget.uId;      // Access the user ID from the widget
     var eventListProvider = Provider.of<EventsListProvider>(context);
-    int eventIndex = eventListProvider.eventsList.indexOf(args);
+    int eventIndex = eventListProvider.eventsList.indexOf(event);
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
     var themeProvider = Provider.of<AppThemeProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: themeProvider.appTheme==ThemeMode.light?MyAppColors.whiteColor:MyAppColors.primaryDark,
+        backgroundColor: themeProvider.appTheme == ThemeMode.light
+            ? MyAppColors.whiteColor
+            : MyAppColors.primaryDark,
         iconTheme: const IconThemeData(
           color: MyAppColors.primaryLight,
         ),
@@ -43,11 +51,11 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
             onTap: () async {
               final updatedEvent = await Navigator.of(context).pushNamed(
                 EditEventScreen.routeName,
-                arguments: {'event': args, 'index': eventIndex},
+                arguments: {'event': event, 'index': eventIndex},
               );
               if (updatedEvent != null) {
                 setState(() {
-                  args = updatedEvent as Event;
+                  event = updatedEvent as Event;  // Update event details
                 });
               }
             },
@@ -82,7 +90,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                         onPressed: () async {
                           try {
                             await Provider.of<EventsListProvider>(context, listen: false)
-                                .deleteEvent(args.id);
+                                .deleteEvent(uId, event.id);
 
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
@@ -120,7 +128,6 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
             },
             child: Image.asset(MyAssetsManager.deleteIcon),
           ),
-
           SizedBox(width: width * 0.02),
         ],
       ),
@@ -133,14 +140,14 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
               ClipRRect(
                 borderRadius: BorderRadius.circular(16),
                 child: Image.asset(
-                  args.imagePath,
+                  event.imagePath,
                   height: height * 0.3,
                   width: width,
                   fit: BoxFit.fill,
                 ),
               ),
               SizedBox(height: height * 0.02),
-              Text(args.title, style: MyAppStyles.medium24Primary),
+              Text(event.title, style: MyAppStyles.medium24Primary),
               SizedBox(height: height * 0.02),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: width * 0.01),
@@ -180,13 +187,15 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            DateFormat('dd MMMM yyyy').format(args.eventDate),
+                            DateFormat('dd MMMM yyyy').format(event.eventDate),
                             style: MyAppStyles.medium16Primary,
                           ),
                           SizedBox(height: height * 0.01),
                           Text(
-                            args.eventTime,
-                            style: themeProvider.appTheme==ThemeMode.light?MyAppStyles.medium16Black:MyAppStyles.medium16White,
+                            event.eventTime,
+                            style: themeProvider.appTheme == ThemeMode.light
+                                ? MyAppStyles.medium16Black
+                                : MyAppStyles.medium16White,
                           ),
                         ],
                       ),
@@ -195,57 +204,18 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                 ),
               ),
               SizedBox(height: height * 0.02),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: width * 0.01),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(
-                    color: MyAppColors.primaryLight,
-                    width: 2,
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    Container(
-                      padding: EdgeInsets.symmetric(
-                        vertical: height * 0.02,
-                        horizontal: width * 0.04,
-                      ),
-                      margin: EdgeInsets.symmetric(
-                        vertical: height * 0.01,
-                        horizontal: width * 0.01,
-                      ),
-                      decoration: BoxDecoration(
-                        color: MyAppColors.primaryLight,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Icon(
-                        Icons.my_location_outlined,
-                        color: themeProvider.appTheme == ThemeMode.light
-                            ? MyAppColors.whiteColor
-                            : MyAppColors.blackColor,
-                      ),
-                    ),
-                    SizedBox(width: width * 0.02),
-                    Expanded(
-                      child: Text(
-                        AppLocalizations.of(context)!
-                            .chooseEventLocation,
-                        style: MyAppStyles.medium16Primary,
-                      ),
-                    ),
-                    const Icon(
-                      Icons.arrow_forward_ios,
-                      color: MyAppColors.primaryLight,
-                    )
-                  ],
-                ),
-              ),
-              SizedBox(height: height * 0.02),
               Text(
-                  AppLocalizations.of(context)!.description,
-                style: themeProvider.appTheme==ThemeMode.light?MyAppStyles.medium16Black:MyAppStyles.medium16White),
-              Text(args.description, style: themeProvider.appTheme==ThemeMode.light?MyAppStyles.medium16Black:MyAppStyles.medium16White)
+                AppLocalizations.of(context)!.description,
+                style: themeProvider.appTheme == ThemeMode.light
+                    ? MyAppStyles.medium16Black
+                    : MyAppStyles.medium16White,
+              ),
+              Text(
+                event.description,
+                style: themeProvider.appTheme == ThemeMode.light
+                    ? MyAppStyles.medium16Black
+                    : MyAppStyles.medium16White,
+              ),
             ],
           ),
         ),

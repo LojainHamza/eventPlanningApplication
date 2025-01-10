@@ -105,5 +105,7 @@
   "warning": "تحذير",
   "event_deleted_successfully": "تم حذف الحدث بنجاح",
   "cancel": "إلغاء",
-  "failed_to_del_event": "فشل حذف الحدث"
+  "failed_to_del_event": "فشل حذف الحدث",
+  "event_added_to_favorites": "تم إضافة الحدث في المفضلة",
+  "event_removed_from_favorites": "تم حذف الحدث من المفضلة"
 }

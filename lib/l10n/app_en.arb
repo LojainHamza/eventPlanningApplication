@@ -105,5 +105,7 @@
   "warning": "Warning",
   "event_deleted_successfully": "Event Deleted Successfully",
   "cancel": "Cancel",
-  "failed_to_del_event": "Failed To Delete Event"
+  "failed_to_del_event": "Failed To Delete Event",
+  "event_added_to_favorites": "Event Added To Favorites",
+  "event_removed_from_favorites": "Event Removed From Favorites"
 }

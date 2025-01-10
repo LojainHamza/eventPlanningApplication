@@ -1,10 +1,13 @@
 import 'package:event_planning_app/providers/app_language_provider.dart';
 import 'package:event_planning_app/providers/app_theme_provider.dart';
+import 'package:event_planning_app/providers/events_list_provider.dart';
+import 'package:event_planning_app/ui/auth/login/login_screen.dart';
 import 'package:event_planning_app/ui/home_screen/tabs/profile/language_bottom_sheet.dart';
 import 'package:event_planning_app/ui/home_screen/tabs/profile/theme_bottom_sheet.dart';
 import 'package:event_planning_app/utils/MyAppColors.dart';
 import 'package:event_planning_app/utils/MyAppStyles.dart';
 import 'package:event_planning_app/utils/myAssetsManager.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -17,12 +20,14 @@ class ProfileTap extends StatefulWidget {
 }
 
 class _ProfileTapState extends State<ProfileTap> {
+
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
     var languageProvider = Provider.of<AppLanguageProvider>(context);
     var themeProvider = Provider.of<AppThemeProvider>(context);
+    var eventListProvider = Provider.of<EventsListProvider>(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: MyAppColors.primaryLight,
@@ -132,7 +137,10 @@ class _ProfileTapState extends State<ProfileTap> {
                   horizontal: width*0.05
                 )
               ),
-                onPressed: (){},
+                onPressed: () {
+                  eventListProvider.filteredList = [];
+                  Navigator.pushReplacementNamed(context, LoginScreen.routeName);
+                },
                 child: Row(
                   children: [
                     Image.asset(MyAssetsManager.exitIcon),
@@ -156,4 +164,5 @@ class _ProfileTapState extends State<ProfileTap> {
     showModalBottomSheet(
         context: context, builder: (context) => ThemeBottomSheet());
   }
+
 }

@@ -24,7 +24,7 @@ class _HomeTabState extends State<HomeTab> {
     var userProvider = Provider.of<UserProvider>(context);
     eventListProvider.getEventsNameList(context);
     if (eventListProvider.eventsList.isEmpty) {
-      eventListProvider.getAllEvents();
+      eventListProvider.getAllEvents(userProvider.currentUser!.id);
     }
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
@@ -119,7 +119,7 @@ class _HomeTabState extends State<HomeTab> {
                     length: eventListProvider.eventsNameList.length,
                     child: TabBar(
                         onTap: (index) {
-                          eventListProvider.changeSelectedIndex(index);
+                          eventListProvider.changeSelectedIndex(index,userProvider.currentUser!.id);
                         },
                         isScrollable: true,
                         indicatorColor: MyAppColors.transparentColor,
