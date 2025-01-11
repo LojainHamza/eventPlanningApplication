@@ -107,5 +107,6 @@
   "cancel": "إلغاء",
   "failed_to_del_event": "فشل حذف الحدث",
   "event_added_to_favorites": "تم إضافة الحدث في المفضلة",
-  "event_removed_from_favorites": "تم حذف الحدث من المفضلة"
+  "event_removed_from_favorites": "تم حذف الحدث من المفضلة",
+  "sign_in_failed": "فشل تسجيل الدخول. يرجى المحاولة مرة أخرى"
 }

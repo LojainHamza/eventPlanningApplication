@@ -160,13 +160,26 @@ class _LoginScreenState extends State<LoginScreen> {
                   ],
                 ),
                 SizedBox(height: height * 0.02),
-                CustomElevatedButton(text: AppLocalizations.of(context)!.loginWithGoogle,
-                onButtonClicked: (){
-                  AuthService().signInWithGoogle();
-                },
-                textStyle: MyAppStyles.medium20Primary,
-                prefixIcon: Image.asset(MyAssetsManager.googleIcon),
-                backgroundColor: MyAppColors.transparentColor),
+                CustomElevatedButton(
+                  text: AppLocalizations.of(context)!.loginWithGoogle,
+                  onButtonClicked: () async {
+                    UserCredential? userCredential = await AuthService().signInWithGoogle();
+
+                    if (userCredential != null) {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => HomeScreen()),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(AppLocalizations.of(context)!.sign_in_failed)),
+                      );
+                    }
+                  },
+                  textStyle: MyAppStyles.medium20Primary,
+                  prefixIcon: Image.asset(MyAssetsManager.googleIcon),
+                  backgroundColor: MyAppColors.transparentColor,
+                ),
                 SizedBox(height: height * 0.03),
                 Container(
                   width: width*0.15,

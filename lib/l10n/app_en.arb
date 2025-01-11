@@ -107,5 +107,6 @@
   "cancel": "Cancel",
   "failed_to_del_event": "Failed To Delete Event",
   "event_added_to_favorites": "Event Added To Favorites",
-  "event_removed_from_favorites": "Event Removed From Favorites"
+  "event_removed_from_favorites": "Event Removed From Favorites",
+  "sign_in_failed": "Sign-in Failed. Please Try Again"
 }
