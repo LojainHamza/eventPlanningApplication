@@ -1,8 +1,8 @@
 import 'package:event_planning_app/firebase_utils.dart';
-import 'package:event_planning_app/model/myUser.dart';
 import 'package:event_planning_app/providers/app_language_provider.dart';
 import 'package:event_planning_app/providers/app_theme_provider.dart';
 import 'package:event_planning_app/providers/user_provider.dart';
+import 'package:event_planning_app/ui/auth/auth_service.dart';
 import 'package:event_planning_app/ui/auth/forget_password/forget_password_screen.dart';
 import 'package:event_planning_app/ui/auth/register/register_screen.dart';
 import 'package:event_planning_app/ui/home_screen/home_screen.dart';
@@ -162,7 +162,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(height: height * 0.02),
                 CustomElevatedButton(text: AppLocalizations.of(context)!.loginWithGoogle,
                 onButtonClicked: (){
-                  // todo: navigate to login with google screen
+                  AuthService().signInWithGoogle();
                 },
                 textStyle: MyAppStyles.medium20Primary,
                 prefixIcon: Image.asset(MyAssetsManager.googleIcon),
