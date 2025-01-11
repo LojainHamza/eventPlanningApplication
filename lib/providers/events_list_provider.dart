@@ -1,9 +1,11 @@
+import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_planning_app/firebase_utils.dart';
 import 'package:event_planning_app/model/event.dart';
 import 'package:event_planning_app/utils/flutter_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class EventsListProvider extends ChangeNotifier {
   // Data
@@ -12,6 +14,11 @@ class EventsListProvider extends ChangeNotifier {
   List<String> eventsNameList = [];
   List<Event> filteredList = [];
   List<Event> favoritesList = [];
+
+  /// Constructor to load favorites on initialization
+  EventsListProvider() {
+    loadFavoritesFromSharedPreferences();
+  }
 
   void getEventsNameList(BuildContext context) {
     eventsNameList = [
@@ -28,14 +35,14 @@ class EventsListProvider extends ChangeNotifier {
     ];
   }
 
-  // Get all events from Firebase
+  /// Get all events from Firebase
   Future<void> getAllEvents(String uId) async {
     try {
       QuerySnapshot<Event> querySnapshot =
       await FirebaseUtils.getEventCollection(uId).get();
       eventsList = querySnapshot.docs.map((doc) => doc.data()).toList();
 
-      // Sort events by date
+      /// Sort events by date
       eventsList.sort((event1, event2) => event1.eventDate.compareTo(event2.eventDate));
       filteredList = List.from(eventsList);
       notifyListeners();
@@ -44,7 +51,7 @@ class EventsListProvider extends ChangeNotifier {
     }
   }
 
-  // Filter events by selected index
+  /// Filter events by selected index
   Future<void> getFilteredEvents(String uId) async {
     try {
       if (selectedIndex == 0) {
@@ -65,13 +72,13 @@ class EventsListProvider extends ChangeNotifier {
     }
   }
 
-  // Change selected index and fetch events accordingly
+  /// Change selected index and fetch events accordingly
   void changeSelectedIndex(int newSelectedIndex, String uId) {
     selectedIndex = newSelectedIndex;
     getFilteredEvents(uId);
   }
 
-// Update an event in Firebase and locally
+  /// Update an event in Firebase and locally
   Future<void> updateEvent(String uId, Event updatedEvent) async {
     try {
       await FirebaseUtils.getEventCollection(uId)
@@ -85,7 +92,7 @@ class EventsListProvider extends ChangeNotifier {
         'eventName': updatedEvent.eventName,
       });
 
-      // Update the local list
+      /// Update the local list
       int index = eventsList.indexWhere((event) => event.id == updatedEvent.id);
       if (index != -1) {
         eventsList[index] = updatedEvent;
@@ -97,14 +104,14 @@ class EventsListProvider extends ChangeNotifier {
     }
   }
 
-// Delete an event from Firebase and locally
+  /// Delete an event from Firebase and locally
   Future<void> deleteEvent(String uId, String eventId) async {
     try {
       await FirebaseUtils.getEventCollection(uId)
           .doc(eventId)
           .delete();
 
-      // Remove the event from the local lists
+      /// Remove the event from the local lists
       eventsList.removeWhere((event) => event.id == eventId);
       filteredList.removeWhere((event) => event.id == eventId);
       favoritesList.removeWhere((event) => event.id == eventId);
@@ -114,26 +121,49 @@ class EventsListProvider extends ChangeNotifier {
     }
   }
 
-  // Add event to favorites
-  void addEventToFavorites(Event event, BuildContext context) {
+  /// Add event to favorites
+  /// Add event to favorites
+  void addEventToFavorites(Event event, BuildContext context) async {
     if (!favoritesList.contains(event)) {
       favoritesList.add(event);
+      await saveFavoritesToSharedPreferences();
       ToastMessage.toastMessage(
           msg: AppLocalizations.of(context)!.event_added_to_favorites);
       notifyListeners();
     }
   }
 
-  // Remove event from favorites
-  void removeEventFromFavorites(Event event, BuildContext context) {
+  /// Remove event from favorites
+  void removeEventFromFavorites(Event event, BuildContext context) async {
     if (favoritesList.contains(event)) {
       favoritesList.remove(event);
+      await saveFavoritesToSharedPreferences();
       ToastMessage.toastMessage(
           msg: AppLocalizations.of(context)!.event_removed_from_favorites);
       notifyListeners();
     }
   }
+
+  Future<void> saveFavoritesToSharedPreferences() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> encodedFavorites = favoritesList
+        .map((event) => jsonEncode(event.toFireStore()))
+        .toList();
+    await prefs.setStringList('favorites', encodedFavorites);
+  }
+
+  Future<void> loadFavoritesFromSharedPreferences() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String>? encodedFavorites = prefs.getStringList('favorites');
+    if (encodedFavorites != null) {
+      favoritesList = encodedFavorites
+          .map((encodedEvent) => Event.fromFireStore(jsonDecode(encodedEvent)))
+          .toList();
+      notifyListeners();
+    }
+  }
 }
+
 
 /*
  // List <Event> favoriteEventList = [];

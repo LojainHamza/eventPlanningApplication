@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class EventDetailsScreen extends StatefulWidget {
   static const String routeName = 'eventDetails';
@@ -25,8 +26,8 @@ class EventDetailsScreen extends StatefulWidget {
 class _EventDetailsScreenState extends State<EventDetailsScreen> {
   @override
   Widget build(BuildContext context) {
-    var event = widget.event;  // Access the event from the widget
-    var uId = widget.uId;      // Access the user ID from the widget
+    var event = widget.event;
+    var uId = widget.uId;
     var eventListProvider = Provider.of<EventsListProvider>(context);
     int eventIndex = eventListProvider.eventsList.indexOf(event);
     var height = MediaQuery.of(context).size.height;
@@ -49,18 +50,25 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
         actions: [
           InkWell(
             onTap: () async {
+              final prefs = await SharedPreferences.getInstance();
+
+              await prefs.setString('selectedImagePath', event.imagePath);
+              await prefs.setString('selectedEventName', event.eventName);
+
               final updatedEvent = await Navigator.of(context).pushNamed(
                 EditEventScreen.routeName,
                 arguments: {'event': event, 'index': eventIndex},
               );
+
               if (updatedEvent != null) {
                 setState(() {
-                  event = updatedEvent as Event;  // Update event details
+                  event = updatedEvent as Event;
                 });
               }
             },
             child: Image.asset(MyAssetsManager.editIcon),
           ),
+
           SizedBox(width: width * 0.02),
           InkWell(
             onTap: () {

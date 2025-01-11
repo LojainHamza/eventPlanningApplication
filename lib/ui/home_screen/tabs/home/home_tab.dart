@@ -155,7 +155,7 @@ class _HomeTabState extends State<HomeTab> {
                 ? Center(
                     child: Text(
                       AppLocalizations.of(context)!.no_events_found,
-                      style: MyAppStyles.medium18Black,
+                      style: themeProvider.appTheme==ThemeMode.light?MyAppStyles.medium16Black:MyAppStyles.medium16White,
                     ),
                   )
                 : ListView.builder(

@@ -23,16 +23,29 @@ import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  /// Initialize Firebase
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  /// Create instances of providers
+  final appLanguageProvider = AppLanguageProvider();
+  final appThemeProvider = AppThemeProvider();
+  final eventsListProvider = EventsListProvider();
+
+  /// Load settings from Shared Preferences
+  await appLanguageProvider.loadLanguage();
+  await appThemeProvider.loadTheme();
+  await eventsListProvider.loadFavoritesFromSharedPreferences();
+
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => AppLanguageProvider()),
-        ChangeNotifierProvider(create: (context) => AppThemeProvider()),
+        ChangeNotifierProvider(create: (context) => appLanguageProvider),
+        ChangeNotifierProvider(create: (context) => appThemeProvider),
         ChangeNotifierProvider(create: (context) => EventsListProvider()),
-        ChangeNotifierProvider(create: (context) => UserProvider())
+        ChangeNotifierProvider(create: (context) => UserProvider()),
       ],
       child: MyApp(),
     ),
