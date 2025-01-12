@@ -133,6 +133,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                     CustomTextField(
                       controller: titleController,
                       hintText: AppLocalizations.of(context)!.eventTitle,
+                      style: TextStyle(color: themeProvider.appTheme==ThemeMode.light?MyAppColors.blackColor:MyAppColors.whiteColor),
                       prefixIcon: Image.asset(MyAssetsManager.noteEditIcon),
                       borderColor: themeProvider.appTheme == ThemeMode.light
                           ? MyAppColors.grayColor
@@ -149,6 +150,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                     CustomTextField(
                       controller: descriptionController,
                       hintText: AppLocalizations.of(context)!.eventDescription,
+                      style: TextStyle(color: themeProvider.appTheme==ThemeMode.light?MyAppColors.blackColor:MyAppColors.whiteColor),
                       maxLines: 4,
                       borderColor: themeProvider.appTheme == ThemeMode.light
                           ? MyAppColors.grayColor

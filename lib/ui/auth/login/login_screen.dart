@@ -167,12 +167,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     UserCredential? userCredential = await AuthService().signInWithGoogle();
 
                     if (userCredential == null) {
-                      // Sign-in failed, show a proper error message
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text(AppLocalizations.of(context)!.sign_in_failed)),
                       );
                     } else {
-                      // Sign-in was successful, update UserProvider
                       MyUser newUser = MyUser(
                         id: userCredential.user!.uid,
                         name: userCredential.user!.displayName ?? '',
@@ -180,7 +178,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       );
                       Provider.of<UserProvider>(context, listen: false).updateUser(newUser);
 
-                      // Navigate to HomeScreen
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(builder: (context) => HomeScreen()),

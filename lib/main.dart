@@ -32,11 +32,13 @@ void main() async {
   /// Create instances of providers
   final appLanguageProvider = AppLanguageProvider();
   final appThemeProvider = AppThemeProvider();
-  final eventsListProvider = EventsListProvider();
+
 
   /// Load settings from Shared Preferences
   await appLanguageProvider.loadLanguage();
   await appThemeProvider.loadTheme();
+
+  final eventsListProvider = EventsListProvider();
   await eventsListProvider.loadFavoritesFromSharedPreferences();
 
   runApp(
@@ -66,7 +68,7 @@ class MyApp extends StatelessWidget {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       locale: Locale(languageProvider.appLanguage),
-      initialRoute: LoginScreen.routeName,
+      initialRoute: StartScreen.routeName,
       routes: {
         StartScreen.routeName: (context) => StartScreen(),
         OnboardingView.routeName: (context) => OnboardingView(),
