@@ -1,6 +1,7 @@
 import 'package:event_planning_app/providers/app_language_provider.dart';
 import 'package:event_planning_app/providers/app_theme_provider.dart';
 import 'package:event_planning_app/providers/events_list_provider.dart';
+import 'package:event_planning_app/providers/user_provider.dart';
 import 'package:event_planning_app/ui/auth/login/login_screen.dart';
 import 'package:event_planning_app/ui/home_screen/tabs/profile/language_bottom_sheet.dart';
 import 'package:event_planning_app/ui/home_screen/tabs/profile/theme_bottom_sheet.dart';
@@ -20,6 +21,13 @@ class ProfileTap extends StatefulWidget {
 }
 
 class _ProfileTapState extends State<ProfileTap> {
+  User? currentUser;
+
+  @override
+  void initState() {
+    super.initState();
+    currentUser = FirebaseAuth.instance.currentUser; // الحصول على المستخدم الحالي
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,27 +36,42 @@ class _ProfileTapState extends State<ProfileTap> {
     var languageProvider = Provider.of<AppLanguageProvider>(context);
     var themeProvider = Provider.of<AppThemeProvider>(context);
     var eventListProvider = Provider.of<EventsListProvider>(context);
+    var userProvider = Provider.of<UserProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: MyAppColors.primaryLight,
         automaticallyImplyLeading: false,
-        toolbarHeight: height*0.2,
+        toolbarHeight: height * 0.2,
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(60)
             )
         ),
         title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Image.asset(MyAssetsManager.routeLogo),
-            SizedBox(width: width*0.03),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('John Safwat',style: MyAppStyles.bold24White,),
-                Text('johnsafwat.route@gmail.com',style: MyAppStyles.medium16White,)
-              ],
-            )
+            Image.asset(
+              MyAssetsManager.routeLogo,
+              width: width*0.35,
+              height: height*0.5,
+            ),
+            SizedBox(width: width * 0.03),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(userProvider.currentUser!.name, style: MyAppStyles.bold24White),
+                  Text(
+                    userProvider.currentUser!.email,
+                    style: MyAppStyles.medium16White,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
@@ -58,8 +81,8 @@ class _ProfileTapState extends State<ProfileTap> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(AppLocalizations.of(context)!.language,
-                style: themeProvider.appTheme == ThemeMode.light?
-                MyAppStyles.bold20Black:
+                style: themeProvider.appTheme == ThemeMode.light ?
+                MyAppStyles.bold20Black :
                 MyAppStyles.bold20White
             ),
             SizedBox(height: height * 0.02),
@@ -92,8 +115,8 @@ class _ProfileTapState extends State<ProfileTap> {
             ),
             SizedBox(height: height * 0.02),
             Text(AppLocalizations.of(context)!.theme,
-                style: themeProvider.appTheme == ThemeMode.light?
-                MyAppStyles.bold20Black:
+                style: themeProvider.appTheme == ThemeMode.light ?
+                MyAppStyles.bold20Black :
                 MyAppStyles.bold20White
             ),
             SizedBox(height: height * 0.02),
@@ -112,8 +135,8 @@ class _ProfileTapState extends State<ProfileTap> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                          themeProvider.isDarkMode()?
-                          AppLocalizations.of(context)!.dark:
+                          themeProvider.isDarkMode() ?
+                          AppLocalizations.of(context)!.dark :
                           AppLocalizations.of(context)!.light,
                           style: MyAppStyles.bold20Primary),
                       SizedBox(height: height * 0.02),
@@ -127,16 +150,16 @@ class _ProfileTapState extends State<ProfileTap> {
             ),
             Spacer(),
             ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: MyAppColors.redColor,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10)
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: MyAppColors.redColor,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)
+                    ),
+                    padding: EdgeInsets.symmetric(
+                        vertical: height * 0.02,
+                        horizontal: width * 0.05
+                    )
                 ),
-                padding: EdgeInsets.symmetric(
-                  vertical: height*0.02,
-                  horizontal: width*0.05
-                )
-              ),
                 onPressed: () {
                   eventListProvider.filteredList = [];
                   Navigator.pushReplacementNamed(context, LoginScreen.routeName);
@@ -144,17 +167,18 @@ class _ProfileTapState extends State<ProfileTap> {
                 child: Row(
                   children: [
                     Image.asset(MyAssetsManager.exitIcon),
-                    SizedBox(width: width*0.02),
-                    Text(AppLocalizations.of(context)!.logout,style: MyAppStyles.medium20White,)
+                    SizedBox(width: width * 0.02),
+                    Text(AppLocalizations.of(context)!.logout, style: MyAppStyles.medium20White,)
                   ],
                 )
             ),
-            SizedBox(height: height*0.025),
+            SizedBox(height: height * 0.025),
           ],
         ),
       ),
     );
   }
+
   void showLanguageBottomSheet() {
     showModalBottomSheet(
         context: context, builder: (context) => LanguageBottomSheet());
@@ -164,5 +188,4 @@ class _ProfileTapState extends State<ProfileTap> {
     showModalBottomSheet(
         context: context, builder: (context) => ThemeBottomSheet());
   }
-
 }

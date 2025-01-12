@@ -1,4 +1,5 @@
 import 'package:event_planning_app/firebase_utils.dart';
+import 'package:event_planning_app/model/myUser.dart';
 import 'package:event_planning_app/providers/app_language_provider.dart';
 import 'package:event_planning_app/providers/app_theme_provider.dart';
 import 'package:event_planning_app/providers/user_provider.dart';
@@ -165,14 +166,24 @@ class _LoginScreenState extends State<LoginScreen> {
                   onButtonClicked: () async {
                     UserCredential? userCredential = await AuthService().signInWithGoogle();
 
-                    if (userCredential != null) {
+                    if (userCredential == null) {
+                      // Sign-in failed, show a proper error message
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(AppLocalizations.of(context)!.sign_in_failed)),
+                      );
+                    } else {
+                      // Sign-in was successful, update UserProvider
+                      MyUser newUser = MyUser(
+                        id: userCredential.user!.uid,
+                        name: userCredential.user!.displayName ?? '',
+                        email: userCredential.user!.email ?? '',
+                      );
+                      Provider.of<UserProvider>(context, listen: false).updateUser(newUser);
+
+                      // Navigate to HomeScreen
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(builder: (context) => HomeScreen()),
-                      );
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(AppLocalizations.of(context)!.sign_in_failed)),
                       );
                     }
                   },
@@ -180,6 +191,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   prefixIcon: Image.asset(MyAssetsManager.googleIcon),
                   backgroundColor: MyAppColors.transparentColor,
                 ),
+
                 SizedBox(height: height * 0.03),
                 Container(
                   width: width*0.15,

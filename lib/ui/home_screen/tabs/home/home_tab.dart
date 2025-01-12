@@ -13,6 +13,7 @@ import 'package:provider/provider.dart';
 
 class HomeTab extends StatefulWidget {
   static const String routeName = 'homeTab';
+
   @override
   State<HomeTab> createState() => _HomeTabState();
 }
@@ -22,10 +23,15 @@ class _HomeTabState extends State<HomeTab> {
   Widget build(BuildContext context) {
     var eventListProvider = Provider.of<EventsListProvider>(context);
     var userProvider = Provider.of<UserProvider>(context);
-    eventListProvider.getEventsNameList(context);
-    if (eventListProvider.eventsList.isEmpty) {
-      eventListProvider.getAllEvents(userProvider.currentUser!.id);
+
+    // تأكد من وجود المستخدم قبل استدعاء أي دالة تعتمد عليه
+    if (userProvider.currentUser != null) {
+      eventListProvider.getEventsNameList(context);
+      if (eventListProvider.eventsList.isEmpty) {
+        eventListProvider.getAllEvents(userProvider.currentUser!.id);
+      }
     }
+
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
     var themeProvider = Provider.of<AppThemeProvider>(context);
@@ -45,33 +51,32 @@ class _HomeTabState extends State<HomeTab> {
               children: [
                 Text(AppLocalizations.of(context)!.welcome_back,
                     style: MyAppStyles.regular14White),
-                Text(userProvider.currentUser!.name, style: MyAppStyles.bold24White)
+                if (userProvider.currentUser != null)
+                  Text(userProvider.currentUser!.name, style: MyAppStyles.bold24White)
+                else
+                  Text('', style: MyAppStyles.bold24White), // Placeholder إذا كان المستخدم null
               ],
             ),
             Row(
               children: [
                 InkWell(
                   onTap: () {
-                    if (themeProvider.isDarkMode()) {
-                      themeProvider.changeTheme(ThemeMode.light);
-                    } else {
-                      themeProvider.changeTheme(ThemeMode.dark);
-                    }
+                    themeProvider.changeTheme(
+                      themeProvider.isDarkMode() ? ThemeMode.light : ThemeMode.dark,
+                    );
                   },
                   child: Icon(
-                     Icons.sunny,
-                    color: themeProvider.isDarkMode()?MyAppColors.primaryLight:MyAppColors.whiteColor,
+                    Icons.sunny,
+                    color: themeProvider.isDarkMode() ? MyAppColors.primaryLight : MyAppColors.whiteColor,
                     size: 32,
                   ),
                 ),
                 SizedBox(width: width * 0.02),
                 InkWell(
                   onTap: () {
-                    if (languageProvider.appLanguage == 'en') {
-                      languageProvider.changeLanguage('ar');
-                    } else {
-                      languageProvider.changeLanguage('en');
-                    }
+                    languageProvider.changeLanguage(
+                      languageProvider.appLanguage == 'en' ? 'ar' : 'en',
+                    );
                   },
                   child: Container(
                     padding: const EdgeInsets.all(8),
@@ -85,7 +90,6 @@ class _HomeTabState extends State<HomeTab> {
                     ),
                   ),
                 ),
-
               ],
             )
           ],
@@ -94,77 +98,76 @@ class _HomeTabState extends State<HomeTab> {
       body: Column(
         children: [
           Container(
-            padding: EdgeInsets.symmetric(
-                horizontal: width * 0.03, vertical: height * 0.01),
+            padding: EdgeInsets.symmetric(horizontal: width * 0.03, vertical: height * 0.01),
             height: height * 0.15,
             decoration: BoxDecoration(
-                color: themeProvider.appTheme == ThemeMode.light
-                    ? MyAppColors.primaryLight
-                    : MyAppColors.primaryDark,
-                borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(35),
-                  bottomRight: Radius.circular(35),
-                )),
+              color: themeProvider.appTheme == ThemeMode.light
+                  ? MyAppColors.primaryLight
+                  : MyAppColors.primaryDark,
+              borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(35),
+                bottomRight: Radius.circular(35),
+              ),
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   children: [
-                    const ImageIcon(AssetImage(MyAssetsManager.mapUnSelected),
-                        color: MyAppColors.whiteColor),
+                    const ImageIcon(AssetImage(MyAssetsManager.mapUnSelected), color: MyAppColors.whiteColor),
                     Text('Cairo , Egypt', style: MyAppStyles.medium14White)
                   ],
                 ),
                 DefaultTabController(
-                    length: eventListProvider.eventsNameList.length,
-                    child: TabBar(
-                        onTap: (index) {
-                          eventListProvider.changeSelectedIndex(index,userProvider.currentUser!.id);
-                        },
-                        isScrollable: true,
-                        indicatorColor: MyAppColors.transparentColor,
-                        dividerColor: MyAppColors.transparentColor,
-                        tabAlignment: TabAlignment.start,
-                        labelPadding: EdgeInsets.symmetric(
-                            horizontal: width * 0.01, vertical: height * 0.02),
-                        tabs: eventListProvider.eventsNameList.map((eventName) {
-                          return TabEventWidget(
-                              borderColor:
-                                  themeProvider.appTheme == ThemeMode.light
-                                      ? MyAppColors.whiteColor
-                                      : MyAppColors.primaryLight,
-                              backgroundColor:
-                                  themeProvider.appTheme == ThemeMode.light
-                                      ? MyAppColors.whiteColor
-                                      : MyAppColors.primaryLight,
-                              selectedTextStyle: MyAppStyles.medium16Primary,
-                              unSelectedTextStyle: MyAppStyles.medium16White,
-                              eventName: eventName,
-                              isSelected: eventListProvider.selectedIndex ==
-                                  eventListProvider.eventsNameList
-                                      .indexOf(eventName));
-                        }).toList())),
+                  length: eventListProvider.eventsNameList.length,
+                  child: TabBar(
+                    onTap: (index) {
+                      if (userProvider.currentUser != null) {
+                        eventListProvider.changeSelectedIndex(index, userProvider.currentUser!.id);
+                      }
+                    },
+                    isScrollable: true,
+                    indicatorColor: MyAppColors.transparentColor,
+                    dividerColor: MyAppColors.transparentColor,
+                    tabAlignment: TabAlignment.start,
+                    labelPadding: EdgeInsets.symmetric(horizontal: width * 0.01, vertical: height * 0.02),
+                    tabs: eventListProvider.eventsNameList.map((eventName) {
+                      return TabEventWidget(
+                        borderColor: themeProvider.appTheme == ThemeMode.light
+                            ? MyAppColors.whiteColor
+                            : MyAppColors.primaryLight,
+                        backgroundColor: themeProvider.appTheme == ThemeMode.light
+                            ? MyAppColors.whiteColor
+                            : MyAppColors.primaryLight,
+                        selectedTextStyle: MyAppStyles.medium16Primary,
+                        unSelectedTextStyle: MyAppStyles.medium16White,
+                        eventName: eventName,
+                        isSelected: eventListProvider.selectedIndex == eventListProvider.eventsNameList.indexOf(eventName),
+                      );
+                    }).toList(),
+                  ),
+                ),
               ],
             ),
           ),
           Expanded(
-              child: Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: width * 0.04, vertical: height * 0.01),
-            child: eventListProvider.filteredList.isEmpty
-                ? Center(
-                    child: Text(
-                      AppLocalizations.of(context)!.no_events_found,
-                      style: themeProvider.appTheme==ThemeMode.light?MyAppStyles.medium16Black:MyAppStyles.medium16White,
-                    ),
-                  )
-                : ListView.builder(
-                    itemCount: eventListProvider.filteredList.length,
-                    itemBuilder: (context, index) {
-                      return EventItemWidget(
-                          event: eventListProvider.filteredList[index]);
-                    }),
-          ))
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: width * 0.04, vertical: height * 0.01),
+              child: eventListProvider.filteredList.isEmpty
+                  ? Center(
+                child: Text(
+                  AppLocalizations.of(context)!.no_events_found,
+                  style: themeProvider.appTheme == ThemeMode.light ? MyAppStyles.medium16Black : MyAppStyles.medium16White,
+                ),
+              )
+                  : ListView.builder(
+                itemCount: eventListProvider.filteredList.length,
+                itemBuilder: (context, index) {
+                  return EventItemWidget(event: eventListProvider.filteredList[index]);
+                },
+              ),
+            ),
+          ),
         ],
       ),
     );
