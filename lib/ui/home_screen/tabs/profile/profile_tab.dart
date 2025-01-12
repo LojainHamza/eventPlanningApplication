@@ -21,13 +21,6 @@ class ProfileTap extends StatefulWidget {
 }
 
 class _ProfileTapState extends State<ProfileTap> {
-  User? currentUser;
-
-  @override
-  void initState() {
-    super.initState();
-    currentUser = FirebaseAuth.instance.currentUser; // الحصول على المستخدم الحالي
-  }
 
   @override
   Widget build(BuildContext context) {
