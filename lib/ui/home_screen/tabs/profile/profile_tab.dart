@@ -54,9 +54,9 @@ class _ProfileTapState extends State<ProfileTap> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(userProvider.currentUser!.name, style: MyAppStyles.bold24White),
+                  Text(userProvider.currentUser?.name??'', style: MyAppStyles.bold24White),
                   Text(
-                    userProvider.currentUser!.email,
+                    userProvider.currentUser?.email??'',
                     style: MyAppStyles.medium16White,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,

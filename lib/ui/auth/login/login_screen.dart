@@ -250,4 +250,9 @@ class _LoginScreenState extends State<LoginScreen> implements LoginNavigator{
     DialogUtils.showMessage(context: context, message: message, posActionName: 'ok');
   }
 
+  @override
+  void goToHomeScreen() {
+    Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
+  }
+
 }

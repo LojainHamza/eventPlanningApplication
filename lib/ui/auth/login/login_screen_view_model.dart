@@ -1,4 +1,5 @@
 import 'package:event_planning_app/ui/auth/login/login_navigator.dart';
+import 'package:event_planning_app/ui/home_screen/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -28,6 +29,7 @@ class LoginScreenViewModel extends ChangeNotifier{
       // userProvider.updateUser(user);
       navigator.hideMyLoading();
       navigator.showMyMessage('Login Successfully');
+      navigator.goToHomeScreen();
       // DialogUtils.showMessage(context: context, message: AppLocalizations.of(context)!.login_successfully,
       //     title: AppLocalizations.of(context)!.success, posActionName: AppLocalizations.of(context)!.ok,
       //     posAction: () {
